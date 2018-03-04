@@ -1,5 +1,16 @@
 /* @flow */
 
+// https://github.com/kevva/strict-uri-encode/blob/master/index.js
+const encodeString = (value: string): string =>
+  encodeURIComponent(value).replace(
+    /[!'()*]/g,
+    (match: string) =>
+      `%${match
+        .charCodeAt(0)
+        .toString(16)
+        .toUpperCase()}`,
+  );
+
 /**
  * Create a query string from an object
  *
@@ -21,7 +32,9 @@ export default (params: ?Object): string => {
     })
     .map((key: string) => {
       const value: string = paramsObject[key];
-      return `${key}=${paramsObject[key]}`;
+      const encodedValue: string = encodeString(value);
+      const encodedKey: string = encodeString(key);
+      return `${encodedKey}=${encodedValue}`;
     });
 
   // join params with and &

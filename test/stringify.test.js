@@ -27,4 +27,12 @@ describe('stringify', () => {
   it('should handle empty array', () => {
     expect(stringify({ foo: [], baz: 'qux' })).toEqual('baz=qux');
   });
+
+  it('should URI encode keys and values', () => {
+    // eslint-disable-next-line prettier/prettier
+    expect(stringify({ 'foo bar': 'baz\'qux' })).toEqual('foo%20bar=baz%27qux');
+    expect(stringify({ 'foo bår': 'baz=qux' })).toEqual(
+      'foo%20b%C3%A5r=baz%3Dqux',
+    );
+  });
 });
