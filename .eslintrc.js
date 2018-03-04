@@ -1,6 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
+    'eslint:recommended',
     'plugin:prettier/recommended',
   ],
   plugins: [
@@ -8,6 +9,9 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 6,
+  },
+  env: {
+    jest: true,
   },
   rules: {
     'flowtype-errors/show-errors': 2,
