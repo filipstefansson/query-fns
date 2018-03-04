@@ -1,5 +1,5 @@
 /* @flow */
-import { parseDefault } from './formatters';
+import { parseDefault, type Formatters } from './formatters';
 
 export type Param = {
   key: string,
@@ -9,8 +9,6 @@ export type Param = {
 export type ParamsObject = {
   [string]: ?string | (?string)[],
 };
-
-export type Formatters = Function[];
 
 type ParseOptions = {
   formatters: Formatters,
@@ -28,7 +26,7 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
   if (!query || typeof query !== 'string') return (Object.create(null): any);
 
   // create options
-  const options = Object.assign(
+  const options: ParseOptions = Object.assign(
     {},
     {
       formatters: [],
@@ -36,7 +34,7 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
     },
     opts,
   );
-  const { formatters, decode } = options;
+  const { formatters, decode }: ParseOptions = options;
 
   // remove spaces and any ?&# in the beginning of the string
   const queryString: string = query.trim().replace(/^[?#&]/, '');
