@@ -22,6 +22,7 @@ describe('stringify', () => {
 
   it('should handle empty values', () => {
     expect(stringify({ foo: null, baz: 'qux' })).toEqual('baz=qux');
+    expect(stringify({ foo: undefined, baz: 'qux' })).toEqual('baz=qux');
   });
 
   it('should handle empty array', () => {
