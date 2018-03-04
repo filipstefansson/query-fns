@@ -27,7 +27,7 @@ export default (params: ?Object): string => {
   const paramsArray: string[] = Object.keys(paramsObject)
     // remove items where value is empty
     .filter((key: string) => {
-      const value: string | (?string)[] = paramsObject[key];
+      const value: ?string | (?string)[] = paramsObject[key];
       return value !== '' && value && value.length > 0;
     })
     .map((key: string) => {
