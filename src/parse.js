@@ -14,6 +14,7 @@ export type Formatters = Function[];
 
 type ParseOptions = {
   formatters: Formatters,
+  decode: boolean,
 };
 
 /**
@@ -27,7 +28,15 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
   if (!query || typeof query !== 'string') return (Object.create(null): any);
 
   // create options
-  const options = Object.assign({}, { formatters: [] }, opts);
+  const options = Object.assign(
+    {},
+    {
+      formatters: [],
+      decode: true,
+    },
+    opts,
+  );
+  const { formatters, decode } = options;
 
   // remove spaces and any ?&# in the beginning of the string
   const queryString: string = query.trim().replace(/^[?#&]/, '');
@@ -54,18 +63,18 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
       );
 
       // pass key, value and current params object to the formatters
-      [parseDefault]
-        .concat(options.formatters)
-        .forEach((formatter: Function) => {
-          if (typeof formatter !== 'function') return;
-          const decodedKey: string = decodeURIComponent(param.key);
-          const decodedValue: ?string = param.value ? param.value : null;
-          newParamsObj[decodedKey] = formatter(
-            decodeURIComponent(decodedKey),
-            param.value ? decodeURIComponent(param.value) : null,
-            newParamsObj,
-          );
-        });
+      [parseDefault].concat(formatters).forEach((formatter: Function) => {
+        if (typeof formatter !== 'function') return;
+        const decodedKey: string = decodeURIComponent(param.key);
+        const decodedValue: ?string = param.value
+          ? decodeURIComponent(param.value)
+          : null;
+        newParamsObj[decode ? decodedKey : param.key] = formatter(
+          decode ? decodedKey : param.key,
+          decode ? decodedValue : param.value,
+          newParamsObj,
+        );
+      });
 
       return newParamsObj;
     },

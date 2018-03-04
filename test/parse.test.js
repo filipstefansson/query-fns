@@ -60,4 +60,10 @@ describe('parse', () => {
     expect(parse('f%C3%A5%C3%A5=bar')).toEqual({ fåå: 'bar' });
     expect(parse('foo=b%C3%A5r')).toEqual({ foo: 'bår' });
   });
+
+  it('can disable decoding', () => {
+    expect(parse('foo%3Abar=b%C3%A5z%20', { decode: false })).toEqual({
+      'foo%3Abar': 'b%C3%A5z%20',
+    });
+  });
 });
