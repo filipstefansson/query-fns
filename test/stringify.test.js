@@ -1,6 +1,6 @@
 import { stringify } from '../src';
 
-describe('parse', () => {
+describe('stringify', () => {
   it('should not be null', () => {
     expect(stringify).toBeDefined();
   });
