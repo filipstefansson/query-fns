@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     'flowtype-errors/show-errors': 2,
+    "flowtype-errors/enforce-min-coverage": [2, 90],
     'prettier/prettier': [
       'error',
       {
