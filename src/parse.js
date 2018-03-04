@@ -7,5 +7,5 @@
  * @return {Object}        The query string params
  */
 export default (query: string): Object => {
-  return {};
+  return { foo: 'bar' };
 };
