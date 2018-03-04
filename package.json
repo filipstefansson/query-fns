@@ -1,0 +1,45 @@
+{
+  "name": "search-params",
+  "version": "0.0.1",
+  "description": "Parse and stringify URL search params.",
+  "main": "dist/search-params.js",
+  "repository": "https://github.com/filipstefansson/search-params",
+  "author": "Filip Stefansson",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "keywords": [
+    "encode",
+    "decode",
+    "param",
+    "parameter",
+    "parse",
+    "qs",
+    "querystring",
+    "query-string",
+    "query",
+    "react-router",
+    "search-params",
+    "search",
+    "string",
+    "stringify",
+    "url",
+    "uri"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "8.0.0-beta.0",
+    "babel-preset-flow": "^6.23.0",
+    "eslint": "^4.18.2",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype-errors": "^3.5.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "flow-bin": "^0.66.0",
+    "prettier": "^1.11.1",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.10"
+  }
+}
