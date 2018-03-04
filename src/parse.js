@@ -1,25 +1,19 @@
 /* @flow */
+import { parseDefault } from './formatters';
 
-type Param = {
+export type Param = {
   key: string,
   value: ?string,
 };
 
-type ParamsObject = {
+export type ParamsObject = {
   [string]: ?string | (?string)[],
 };
 
-// TODO: move this to its own file
-const parseFormatter = (
-  key: string,
-  value: ?string,
-  accumulator: ParamsObject,
-): ?string | (?string)[] => {
-  const decodedValue: ?string = value ? decodeURIComponent(value) : null;
-  // if there's no previous value, just add it
-  if (accumulator[key] === undefined) return (accumulator[key] = decodedValue);
-  // if there's a previous value, add new value to that
-  return [].concat(accumulator[key], decodedValue);
+export type Formatters = Function[];
+
+type ParseOptions = {
+  formatters: Formatters,
 };
 
 /**
@@ -28,9 +22,12 @@ const parseFormatter = (
  * @param  {string} string A query string
  * @return {ParamsObject}        The query string params
  */
-export default (query: string): ParamsObject => {
+export default (query: string, opts: ParseOptions): ParamsObject => {
   // early exit
   if (!query || typeof query !== 'string') return (Object.create(null): any);
+
+  // create options
+  const options = Object.assign({}, { formatters: [] }, opts);
 
   // remove spaces and any ?&# in the beginning of the string
   const queryString: string = query.trim().replace(/^[?#&]/, '');
@@ -43,7 +40,7 @@ export default (query: string): ParamsObject => {
       const parts: string[] = param.split('=');
       const key: string = parts.shift();
       const value: ?string = parts.length > 0 ? parts.join('=') : null;
-      return { key: decodeURIComponent(key), value };
+      return { key, value };
     });
 
   // reduce array in to an object we can return
@@ -56,13 +53,19 @@ export default (query: string): ParamsObject => {
         paramsObj,
       );
 
-      // pass key, value and current params object to the formatter
-      // TODO: add more formatters and support for custom function
-      newParamsObj[param.key] = parseFormatter(
-        param.key,
-        param.value,
-        newParamsObj,
-      );
+      // pass key, value and current params object to the formatters
+      [parseDefault]
+        .concat(options.formatters)
+        .forEach((formatter: Function) => {
+          if (typeof formatter !== 'function') return;
+          const decodedKey: string = decodeURIComponent(param.key);
+          const decodedValue: ?string = param.value ? param.value : null;
+          newParamsObj[decodedKey] = formatter(
+            decodeURIComponent(decodedKey),
+            param.value ? decodeURIComponent(param.value) : null,
+            newParamsObj,
+          );
+        });
 
       return newParamsObj;
     },
