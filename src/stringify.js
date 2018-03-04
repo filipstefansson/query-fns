@@ -1,4 +1,10 @@
 /* @flow */
+import { type Formatters } from './formatters';
+
+type StringifyOptions = {
+  formatters: Formatters,
+  encode: boolean,
+};
 
 // https://github.com/kevva/strict-uri-encode/blob/master/index.js
 const encodeString = (value: string): string =>
@@ -17,8 +23,19 @@ const encodeString = (value: string): string =>
  * @param  {Object} params Object with params
  * @return {string}        A query string
  */
-export default (params: ?Object): string => {
+export default (params: ?Object, opts: StringifyOptions): string => {
   if (!params || typeof params !== 'object') return '';
+
+  // create options
+  const options: StringifyOptions = Object.assign(
+    {},
+    {
+      formatters: [],
+      encode: true,
+    },
+    opts,
+  );
+  const { encode }: StringifyOptions = options;
 
   // create new params object
   const paramsObject: Object = Object.assign({}, params);
@@ -32,8 +49,8 @@ export default (params: ?Object): string => {
     })
     .map((key: string) => {
       const value: string = paramsObject[key];
-      const encodedValue: string = encodeString(value);
-      const encodedKey: string = encodeString(key);
+      const encodedValue: string = encode ? encodeString(value) : value;
+      const encodedKey: string = encode ? encodeString(key) : key;
       return `${encodedKey}=${encodedValue}`;
     });
 

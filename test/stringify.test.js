@@ -29,11 +29,17 @@ describe('stringify', () => {
     expect(stringify({ foo: [], baz: 'qux' })).toEqual('baz=qux');
   });
 
-  it('should URI encode keys and values', () => {
+  it('can URI encode keys and values', () => {
     // eslint-disable-next-line prettier/prettier
     expect(stringify({ 'foo bar': 'baz\'qux' })).toEqual('foo%20bar=baz%27qux');
     expect(stringify({ 'foo bår': 'baz=qux' })).toEqual(
       'foo%20b%C3%A5r=baz%3Dqux',
+    );
+  });
+
+  it('can disable URI encoding', () => {
+    expect(stringify({ 'foo bar': "baz'qux" }, { encode: false })).toEqual(
+      "foo bar=baz'qux",
     );
   });
 });
