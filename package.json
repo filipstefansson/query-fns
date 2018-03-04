@@ -7,7 +7,8 @@
   "author": "Filip Stefansson",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "test": "jest"
   },
   "keywords": [
     "encode",
@@ -30,7 +31,10 @@
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/preset-flow": "^7.0.0-beta.40",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.1",
     "babel-loader": "8.0.0-beta.0",
     "babel-preset-flow": "^6.23.0",
     "eslint": "^4.18.2",
@@ -38,8 +42,11 @@
     "eslint-plugin-flowtype-errors": "^3.5.1",
     "eslint-plugin-prettier": "^2.6.0",
     "flow-bin": "^0.66.0",
+    "jest": "^22.4.2",
     "prettier": "^1.11.1",
+    "regenerator-runtime": "^0.11.1",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.10"
-  }
+  },
+  "dependencies": {}
 }
