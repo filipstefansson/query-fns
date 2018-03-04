@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production",
-    "test": "jest"
+    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
     "encode",
@@ -37,6 +37,7 @@
     "babel-jest": "^22.4.1",
     "babel-loader": "8.0.0-beta.0",
     "babel-preset-flow": "^6.23.0",
+    "coveralls": "^3.0.0",
     "eslint": "^4.18.2",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-flowtype-errors": "^3.5.1",
