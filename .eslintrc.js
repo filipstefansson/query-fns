@@ -3,8 +3,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:prettier/recommended',
+    'plugin:flowtype/recommended',
   ],
   plugins: [
+    'flowtype',
     'flowtype-errors',
   ],
   parserOptions: {

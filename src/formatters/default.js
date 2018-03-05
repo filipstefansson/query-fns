@@ -1,6 +1,4 @@
 /* @flow */
-import { type ParamsObject, type Value } from '../parse';
-import { type Formatter, type StringifyFunction } from '.';
 
 const parse: Function = (
   key: string,

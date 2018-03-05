@@ -1,19 +1,5 @@
 /* @flow */
-import {
-  type Formatters,
-  type Formatter,
-  defaultFormatter,
-} from './formatters';
-
-export type Param = {
-  key: string,
-  value: ?string,
-};
-
-type StringifyOptions = {
-  formatters: Formatters,
-  encode: boolean,
-};
+import { defaultFormatter } from './formatters';
 
 // https://github.com/kevva/strict-uri-encode/blob/master/index.js
 const encodeString: Function = (value: string): string =>

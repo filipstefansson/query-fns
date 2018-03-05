@@ -1,6 +1,4 @@
 /* @flow */
-import { type Value } from '../parse';
-import { type StringifyFunction } from '.';
 
 const parse = (key: string, value: Value): Value => {
   // early exit

@@ -1,25 +1,5 @@
 /* @flow */
-import {
-  type Formatters,
-  type Formatter,
-  defaultFormatter,
-} from './formatters';
-
-export type Param = {
-  key: string,
-  value: ?string,
-};
-
-export type Value = ?string | (?string)[];
-
-export type ParamsObject = {
-  [string]: Value,
-};
-
-type ParseOptions = {
-  formatters: Formatters,
-  decode: boolean,
-};
+import { defaultFormatter } from './formatters';
 
 /**
  * Parse a query string.
