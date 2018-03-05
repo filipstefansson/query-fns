@@ -66,4 +66,8 @@ describe('parse', () => {
       'foo%3Abar': 'b%C3%A5z%20',
     });
   });
+
+  it('can handle faulty formatters', () => {
+    expect(parse('foo=bar', { formatters: [null] })).toEqual({ foo: 'bar' });
+  });
 });
