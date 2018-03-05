@@ -1,4 +1,5 @@
 import { parse } from '../src';
+import { pipeArrayFormatter } from '../src/formatters';
 
 describe('parse', () => {
   it('should not be null', () => {
@@ -69,5 +70,52 @@ describe('parse', () => {
 
   it('can handle faulty formatters', () => {
     expect(parse('foo=bar', { formatters: [null] })).toEqual({ foo: 'bar' });
+  });
+
+  it('can parse pipe arrays', () => {
+    expect(
+      parse('foo=bar|baz&qux=quux', { formatters: [pipeArrayFormatter] }),
+    ).toEqual({
+      foo: ['bar', 'baz'],
+      qux: 'quux',
+    });
+  });
+
+  it('preserves order of pipe array values', () => {
+    expect(
+      parse('foo=bar|baz&qux=baz|bar', { formatters: [pipeArrayFormatter] }),
+    ).toEqual({
+      foo: ['bar', 'baz'],
+      qux: ['baz', 'bar'],
+    });
+  });
+
+  it('can parse array with pipe arrays', () => {
+    expect(
+      parse('foo=baz&foo=bar|baz&qux=quux', {
+        formatters: [pipeArrayFormatter],
+      }),
+    ).toEqual({
+      foo: ['baz', ['bar', 'baz']],
+      qux: 'quux',
+    });
+  });
+
+  it('can parse pipe arrays with bad values', () => {
+    expect(
+      parse('foo=bar||baz&qux', { formatters: [pipeArrayFormatter] }),
+    ).toEqual({
+      foo: ['bar', 'baz'],
+      qux: null,
+    });
+  });
+
+  it('can parse values without pipes', () => {
+    expect(
+      parse('foo=bar&foo=baz&qux', { formatters: [pipeArrayFormatter] }),
+    ).toEqual({
+      foo: ['bar', 'baz'],
+      qux: null,
+    });
   });
 });

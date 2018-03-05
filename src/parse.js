@@ -1,13 +1,19 @@
 /* @flow */
-import { defaultFormatter, type Formatters } from './formatters';
+import {
+  type Formatters,
+  type Formatter,
+  defaultFormatter,
+} from './formatters';
 
 export type Param = {
   key: string,
   value: ?string,
 };
 
+export type Value = ?string | (?string)[];
+
 export type ParamsObject = {
-  [string]: ?string | (?string)[],
+  [string]: Value,
 };
 
 type ParseOptions = {
@@ -54,29 +60,23 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
   // Object.create(null) creates a new object without prototype
   const reduced: ParamsObject = params.reduce(
     (paramsObj: ParamsObject, param: Param) => {
-      // copy previous params object
-      const newParamsObj: ParamsObject = Object.assign(
-        (Object.create(null): any),
-        paramsObj,
-      );
+      // set initial value
+      let key: string = decode ? decodeURIComponent(param.key) : param.key;
+      let value: ?string = param.value ? decodeURIComponent(param.value) : null;
 
       // pass key, value and current params object to the formatters
-      [defaultFormatter.parse]
-        .concat(formatters)
-        .forEach((formatter: Function) => {
-          if (typeof formatter !== 'function') return;
-          const decodedKey: string = decodeURIComponent(param.key);
-          const decodedValue: ?string = param.value
-            ? decodeURIComponent(param.value)
-            : null;
-          newParamsObj[decode ? decodedKey : param.key] = formatter(
-            decode ? decodedKey : param.key,
-            decode ? decodedValue : param.value,
-            newParamsObj,
-          );
-        });
+      [defaultFormatter].concat(formatters).forEach((formatter: Formatter) => {
+        if (!formatter || typeof formatter.parse !== 'function') return;
+        const newValue: any = formatter.parse(
+          key,
+          paramsObj[key],
+          paramsObj,
+          decode ? value : param.value,
+        );
+        paramsObj[key] = newValue;
+      });
 
-      return newParamsObj;
+      return paramsObj;
     },
     (Object.create(null): any),
   );

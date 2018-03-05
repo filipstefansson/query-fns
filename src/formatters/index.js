@@ -1,4 +1,9 @@
+/* @flow */
 import defaultFormatter from './default';
-export type Formatters = Function[];
+import pipeArrayFormatter from './pipeArray';
+import { type Value } from '../parse';
+export type StringifyFunction = (string, Value) => any;
+export type Formatter = { parse: Function, stringify: StringifyFunction };
+export type Formatters = Formatter[];
 
-export { defaultFormatter };
+export { defaultFormatter, pipeArrayFormatter };

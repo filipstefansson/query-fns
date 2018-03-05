@@ -1,5 +1,9 @@
 /* @flow */
-import { defaultFormatter, type Formatters } from './formatters';
+import {
+  type Formatters,
+  type Formatter,
+  defaultFormatter,
+} from './formatters';
 
 export type Param = {
   key: string,
@@ -12,7 +16,7 @@ type StringifyOptions = {
 };
 
 // https://github.com/kevva/strict-uri-encode/blob/master/index.js
-const encodeString = (value: string): string =>
+const encodeString: Function = (value: string): string =>
   encodeURIComponent(value).replace(
     /[!'()*]/g,
     (match: string) =>
@@ -54,17 +58,31 @@ export default (params: ?Object, opts: StringifyOptions): string => {
     })
     .map((key: string) => {
       const value: string = paramsObject[key];
-      const encodedValue: string = encode ? encodeString(value) : value;
-      const encodedKey: string = encode ? encodeString(key) : key;
 
       // pass key, value to the formatters
-      const reduced: string = formatters
-        .concat([defaultFormatter.stringify])
-        .reduce((previous: Param, formatter: Function) => {
-          if (typeof formatter !== 'function') return previous;
-          return formatter(previous.key, previous.value);
-        }, ({ key: encodedKey, value: encodedValue }: Param));
-      return reduced;
+      const reduced: Param = formatters.reduce(
+        (previous: Param, formatter: Formatter) => {
+          if (!formatter || typeof formatter.stringify !== 'function') {
+            return previous;
+          }
+          return formatter.stringify(previous.key, previous.value || '');
+        },
+        ({ key: key, value: value }: Param),
+      );
+
+      const encodedKey: string = encode
+        ? encodeString(reduced.key)
+        : reduced.key;
+      const encodedValue: string = encode
+        ? encodeString(reduced.value || '')
+        : reduced.value || '';
+
+      const stringified: string = defaultFormatter.stringify(
+        encodedKey,
+        encodedValue,
+      );
+
+      return stringified;
     });
 
   // join params with and &

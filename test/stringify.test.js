@@ -1,4 +1,5 @@
 import { stringify } from '../src';
+import { pipeArrayFormatter } from '../src/formatters';
 
 describe('stringify', () => {
   it('should not be null', () => {
@@ -47,5 +48,17 @@ describe('stringify', () => {
     expect(stringify({ foo: 'bar' }, { formatters: [null] })).toEqual(
       'foo=bar',
     );
+  });
+
+  it('can stringify to pipe arrays', () => {
+    expect(
+      stringify(
+        {
+          foo: ['bar', 'baz'],
+          qux: 'quux',
+        },
+        { formatters: [pipeArrayFormatter], encode: false },
+      ),
+    ).toEqual('foo=bar|baz&qux=quux');
   });
 });
