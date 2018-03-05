@@ -1,16 +1,6 @@
 /* @flow */
 import { defaultFormatter } from './formatters';
-
-// https://github.com/kevva/strict-uri-encode/blob/master/index.js
-const encodeString: Function = (value: string): string =>
-  encodeURIComponent(value).replace(
-    /[!'()*]/g,
-    (match: string) =>
-      `%${match
-        .charCodeAt(0)
-        .toString(16)
-        .toUpperCase()}`,
-  );
+import encodeString from './utils/encode';
 
 /**
  * Create a query string from an object
@@ -39,11 +29,11 @@ export default (params: ?Object, opts: StringifyOptions): string => {
   const paramsArray: string[] = Object.keys(paramsObject)
     // remove items where value is empty
     .filter((key: string) => {
-      const value: ?string | (?string)[] = paramsObject[key];
+      const value: Value = paramsObject[key];
       return value !== '' && value && value.length > 0;
     })
     .map((key: string) => {
-      const value: string = paramsObject[key];
+      const encodedKey: string = encode ? encodeString(key) : key;
 
       // pass key, value to the formatters
       const reduced: Param = formatters.reduce(
@@ -51,21 +41,16 @@ export default (params: ?Object, opts: StringifyOptions): string => {
           if (!formatter || typeof formatter.stringify !== 'function') {
             return previous;
           }
-          return formatter.stringify(previous.key, previous.value || '');
+          return formatter.stringify(previous.key, previous.value, options);
         },
-        ({ key: key, value: value }: Param),
+        ({ key: encodedKey, value: paramsObject[key] }: Param),
       );
 
-      const encodedKey: string = encode
-        ? encodeString(reduced.key)
-        : reduced.key;
-      const encodedValue: string = encode
-        ? encodeString(reduced.value || '')
-        : reduced.value || '';
-
+      // use defaultFormatter to create the key:value string
       const stringified: string = defaultFormatter.stringify(
-        encodedKey,
-        encodedValue,
+        reduced.key,
+        reduced.value,
+        options,
       );
 
       return stringified;

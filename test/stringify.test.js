@@ -57,8 +57,41 @@ describe('stringify', () => {
           foo: ['bar', 'baz'],
           qux: 'quux',
         },
-        { formatters: [pipeArrayFormatter], encode: false },
+        { formatters: [pipeArrayFormatter] },
       ),
     ).toEqual('foo=bar|baz&qux=quux');
+  });
+
+  it('can stringify to pipe arrays and URI encode', () => {
+    expect(
+      stringify(
+        {
+          fåå: ['bår', 'båz'],
+        },
+        { formatters: [pipeArrayFormatter] },
+      ),
+    ).toEqual('f%C3%A5%C3%A5=b%C3%A5r|b%C3%A5z');
+  });
+
+  it('can stringify to pipe arrays and not URI encode', () => {
+    expect(
+      stringify(
+        {
+          fåå: ['bår', 'båz'],
+        },
+        { formatters: [pipeArrayFormatter], encode: false },
+      ),
+    ).toEqual('fåå=bår|båz');
+  });
+
+  it('can stringify to pipe arrays and handle bad input', () => {
+    expect(
+      stringify(
+        {
+          foo: ['bar', null, ' ', '', 'baz'],
+        },
+        { formatters: [pipeArrayFormatter] },
+      ),
+    ).toEqual('foo=bar|baz');
   });
 });

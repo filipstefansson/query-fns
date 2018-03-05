@@ -32,7 +32,7 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
     .map((param: string): Param => {
       const parts: string[] = param.split('=');
       const key: string = parts.shift();
-      const value: ?string = parts.length > 0 ? parts.join('=') : null;
+      const value: Value = parts.length > 0 ? parts.join('=') : null;
       return { key, value };
     });
 
@@ -41,18 +41,23 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
   const reduced: ParamsObject = params.reduce(
     (paramsObj: ParamsObject, param: Param) => {
       // set initial value
-      let key: string = decode ? decodeURIComponent(param.key) : param.key;
-      let value: ?string = param.value ? decodeURIComponent(param.value) : null;
+      const key: string = decode ? decodeURIComponent(param.key) : param.key;
+      const value: Value =
+        typeof param.value === 'string'
+          ? decodeURIComponent(param.value)
+          : null;
+
+      // run default formatter before the user defined ones
+      paramsObj[key] = defaultFormatter.parse(
+        key,
+        decode ? value : param.value,
+        paramsObj,
+      );
 
       // pass key, value and current params object to the formatters
-      [defaultFormatter].concat(formatters).forEach((formatter: Formatter) => {
+      formatters.forEach((formatter: Formatter) => {
         if (!formatter || typeof formatter.parse !== 'function') return;
-        const newValue: any = formatter.parse(
-          key,
-          paramsObj[key],
-          paramsObj,
-          decode ? value : param.value,
-        );
+        const newValue: any = formatter.parse(key, paramsObj[key], paramsObj);
         paramsObj[key] = newValue;
       });
 

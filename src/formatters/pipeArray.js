@@ -1,29 +1,51 @@
 /* @flow */
+import encodeString from '../utils/encode';
 
 const parse = (key: string, value: Value): Value => {
   // early exit
   if (!value || value === '') return value;
-  const isArray = Array.isArray(value);
-  if (isArray) {
-    return (value: any).map((nestedValue: Value): Value =>
-      parse(key, nestedValue),
-    );
+  // handle array by calling parse recursively
+  if (Array.isArray(value)) {
+    return value.map((nestedValue: Value): Value => parse(key, nestedValue));
   }
-  const parts: (?string)[] = (value: any).split('|');
-  const newValue: Value =
-    parts.length > 1
-      ? parts.filter((val: Value) => val && val !== '')
-      : parts[0];
-  return newValue;
+
+  // handle single values by splitting them by |
+  if (typeof value === 'string') {
+    // split the string in to an array of strings
+    const parts: Value = value.split('|').map(val => val);
+    if (Array.isArray(parts)) {
+      // if split was succesful, make sure the length of the array is more than
+      // 1 otherwise return it a string instead of an array
+      const newValue: Value =
+        parts.length > 1
+          ? parts.filter((val: Value) => val && val !== '')
+          : parts[0];
+      return newValue;
+    }
+    return value;
+  }
 };
 
-const stringify: StringifyFunction = (key: string, value: Value): any => {
-  const isArray = Array.isArray(value);
-  if (isArray) {
-    return { key, value: (value: any).join('|') };
+const stringify: StringifyFormatter = (
+  key: string,
+  value: Value,
+  options: StringifyOptions,
+): Param => {
+  if (Array.isArray(value)) {
+    const newValue = (!options.encode
+      ? value
+      : value.map((val: Value) => {
+          if (typeof val === 'string') {
+            return encodeString(val.trim());
+          }
+        })
+    ).filter((val: Value) => val && val !== '');
+    return {
+      key,
+      value: newValue.join('|'),
+    };
   }
-  if (!value || value === '') return value;
-  return { key, value: value };
+  return { key, value };
 };
 
 export default {

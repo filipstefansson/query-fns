@@ -1,17 +1,17 @@
+declare type Value = ?string | (?Value)[];
+
 declare type Param = {
   key: string,
-  value: ?string,
+  value: Value,
 };
-
-declare type Value = ?string | (?string)[];
 
 declare type ParamsObject = {
   [string]: Value,
 };
 
-declare type StringifyFunction = (string, Value) => any;
+declare type StringifyFormatter = (string, Value, StringifyOptions) => Param;
 
-declare type Formatter = { parse: Function, stringify: StringifyFunction };
+declare type Formatter = { parse: Function, stringify: StringifyFormatter };
 
 declare type Formatters = Formatter[];
 
