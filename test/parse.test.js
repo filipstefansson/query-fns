@@ -108,6 +108,7 @@ describe('parse', () => {
       foo: ['bar', 'baz'],
       qux: null,
     });
+    expect(parse({}, { formatters: [pipeArrayFormatter] })).toEqual({});
   });
 
   it('can parse values without pipes', () => {

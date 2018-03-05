@@ -9,21 +9,16 @@ const parse = (key: string, value: Value): Value => {
     return value.map((nestedValue: Value): Value => parse(key, nestedValue));
   }
 
-  // handle single values by splitting them by |
-  if (typeof value === 'string') {
-    // split the string in to an array of strings
-    const parts: Value = value.split('|').map(val => val.trim());
-    if (Array.isArray(parts)) {
-      // if split was succesful, make sure the length of the array is more than
-      // 1 otherwise return it a string instead of an array
-      const newValue: Value =
-        parts.length > 1
-          ? parts.filter((val: Value) => val && val !== '')
-          : parts[0];
-      return newValue;
-    }
-    return value;
-  }
+  // split the string in to an array of strings
+  const parts: Value = value.split('|').map(val => val.trim());
+  // if split was succesful, make sure the length of the array is more than
+  // 1 otherwise return it a string instead of an array
+  const newValue: Value =
+    Array.isArray(parts) && parts.length > 1
+      ? parts.filter((val: Value) => val && val !== '')
+      : parts && parts[0];
+
+  return newValue;
 };
 
 const stringify: StringifyFormatter = (
@@ -31,7 +26,9 @@ const stringify: StringifyFormatter = (
   value: Value,
   options: StringifyOptions,
 ): Param => {
+  // if value is an array, we go through it and add | between the items
   if (Array.isArray(value)) {
+    // encode values if encode option is true
     const newValue = (!options.encode
       ? value
       : value.map((val: Value) => {
@@ -39,7 +36,8 @@ const stringify: StringifyFormatter = (
             return encodeString(val.trim());
           }
         })
-    ).filter((val: Value) => val && val !== '');
+    ).filter((val: Value) => val && val !== ''); // filter out empty values
+    // join array of items by |
     return {
       key,
       value: newValue.join('|'),
