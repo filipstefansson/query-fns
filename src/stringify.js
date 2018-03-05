@@ -30,7 +30,11 @@ export default (params: ?Object, opts: StringifyOptions): string => {
     // remove items where value is empty
     .filter((key: string) => {
       const value: Value = paramsObject[key];
-      return value !== '' && value && value.length > 0;
+      // remove bad strings
+      if (typeof value === 'string' && value.trim() === '') return false;
+
+      // include if good
+      return value && value.length > 0;
     })
     .map((key: string) => {
       const encodedKey: string = encode ? encodeString(key) : key;
@@ -57,7 +61,7 @@ export default (params: ?Object, opts: StringifyOptions): string => {
     });
 
   // join params with and &
-  const joinedParams: string = paramsArray.join('&');
+  const joinedParams: string = paramsArray.filter(val => val).join('&');
 
   return joinedParams;
 };

@@ -22,8 +22,26 @@ describe('stringify', () => {
   });
 
   it('should handle empty values', () => {
-    expect(stringify({ foo: null, baz: 'qux' })).toEqual('baz=qux');
+    expect(stringify({ foo: null, baz: 'qux', qux: ' ' })).toEqual('baz=qux');
     expect(stringify({ foo: undefined, baz: 'qux' })).toEqual('baz=qux');
+  });
+
+  it('should handle arrays', () => {
+    expect(stringify({ foo: ['bar', 'qux'], baz: 'qux' })).toEqual(
+      'foo=bar&foo=qux&baz=qux',
+    );
+  });
+
+  it('should handle arrays without encoding', () => {
+    expect(
+      stringify({ foo: ['bar', 'qux'], baz: 'qux' }, { encode: false }),
+    ).toEqual('foo=bar&foo=qux&baz=qux');
+  });
+
+  it('should handle arrays with bad values', () => {
+    expect(stringify({ foo: [' ', 'bar', null], bar: Object })).toEqual(
+      'foo=bar',
+    );
   });
 
   it('should handle empty array', () => {
