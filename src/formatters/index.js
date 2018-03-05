@@ -1,4 +1,4 @@
-import parseDefault from './parseDefault';
+import defaultFormatter from './default';
 export type Formatters = Function[];
 
-export { parseDefault };
+export { defaultFormatter };

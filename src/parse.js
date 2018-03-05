@@ -1,5 +1,5 @@
 /* @flow */
-import { parseDefault, type Formatters } from './formatters';
+import { defaultFormatter, type Formatters } from './formatters';
 
 export type Param = {
   key: string,
@@ -61,18 +61,20 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
       );
 
       // pass key, value and current params object to the formatters
-      [parseDefault].concat(formatters).forEach((formatter: Function) => {
-        if (typeof formatter !== 'function') return;
-        const decodedKey: string = decodeURIComponent(param.key);
-        const decodedValue: ?string = param.value
-          ? decodeURIComponent(param.value)
-          : null;
-        newParamsObj[decode ? decodedKey : param.key] = formatter(
-          decode ? decodedKey : param.key,
-          decode ? decodedValue : param.value,
-          newParamsObj,
-        );
-      });
+      [defaultFormatter.parse]
+        .concat(formatters)
+        .forEach((formatter: Function) => {
+          if (typeof formatter !== 'function') return;
+          const decodedKey: string = decodeURIComponent(param.key);
+          const decodedValue: ?string = param.value
+            ? decodeURIComponent(param.value)
+            : null;
+          newParamsObj[decode ? decodedKey : param.key] = formatter(
+            decode ? decodedKey : param.key,
+            decode ? decodedValue : param.value,
+            newParamsObj,
+          );
+        });
 
       return newParamsObj;
     },

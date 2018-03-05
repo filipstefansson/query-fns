@@ -42,4 +42,10 @@ describe('stringify', () => {
       "foo bar=baz'qux",
     );
   });
+
+  it('can handle faulty formatters', () => {
+    expect(stringify({ foo: 'bar' }, { formatters: [null] })).toEqual(
+      'foo=bar',
+    );
+  });
 });

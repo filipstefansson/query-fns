@@ -1,5 +1,10 @@
 /* @flow */
-import { type Formatters } from './formatters';
+import { defaultFormatter, type Formatters } from './formatters';
+
+export type Param = {
+  key: string,
+  value: ?string,
+};
 
 type StringifyOptions = {
   formatters: Formatters,
@@ -35,7 +40,7 @@ export default (params: ?Object, opts: StringifyOptions): string => {
     },
     opts,
   );
-  const { encode }: StringifyOptions = options;
+  const { formatters, encode }: StringifyOptions = options;
 
   // create new params object
   const paramsObject: Object = Object.assign({}, params);
@@ -51,7 +56,15 @@ export default (params: ?Object, opts: StringifyOptions): string => {
       const value: string = paramsObject[key];
       const encodedValue: string = encode ? encodeString(value) : value;
       const encodedKey: string = encode ? encodeString(key) : key;
-      return `${encodedKey}=${encodedValue}`;
+
+      // pass key, value to the formatters
+      const reduced: string = formatters
+        .concat([defaultFormatter.stringify])
+        .reduce((previous: Param, formatter: Function) => {
+          if (typeof formatter !== 'function') return previous;
+          return formatter(previous.key, previous.value);
+        }, ({ key: encodedKey, value: encodedValue }: Param));
+      return reduced;
     });
 
   // join params with and &

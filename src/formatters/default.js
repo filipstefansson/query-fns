@@ -1,6 +1,6 @@
 import { type ParamsObject } from '../parse';
 
-export default (
+const parse = (
   key: string,
   value: ?string,
   accumulator: ParamsObject,
@@ -9,4 +9,13 @@ export default (
   if (accumulator[key] === undefined) return (accumulator[key] = value);
   // if there's a previous value, add new value to that
   return [].concat(accumulator[key], value);
+};
+
+const stringify = (key: string, value: string) => {
+  return `${key}=${value}`;
+};
+
+export default {
+  parse,
+  stringify,
 };
