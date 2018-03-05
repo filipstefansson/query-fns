@@ -12,7 +12,7 @@ const parse = (key: string, value: Value): Value => {
   // handle single values by splitting them by |
   if (typeof value === 'string') {
     // split the string in to an array of strings
-    const parts: Value = value.split('|').map(val => val);
+    const parts: Value = value.split('|').map(val => val.trim());
     if (Array.isArray(parts)) {
       // if split was succesful, make sure the length of the array is more than
       // 1 otherwise return it a string instead of an array

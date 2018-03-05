@@ -103,7 +103,7 @@ describe('parse', () => {
 
   it('can parse pipe arrays with bad values', () => {
     expect(
-      parse('foo=bar||baz&qux|', { formatters: [pipeArrayFormatter] }),
+      parse('foo=bar| | baz&qux', { formatters: [pipeArrayFormatter] }),
     ).toEqual({
       foo: ['bar', 'baz'],
       qux: null,
