@@ -1547,6 +1547,13 @@ browserify-zlib@^0.2.0:
   dependencies:
     pako "~1.0.5"
 
+browserslist@^2.11.3:
+  version "2.11.3"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-2.11.3.tgz#fe36167aed1bbcde4827ebfe71347a2cc70b99b2"
+  dependencies:
+    caniuse-lite "^1.0.30000792"
+    electron-to-chromium "^1.3.30"
+
 browserslist@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.1.1.tgz#d380fc048bc3a33e60fb87dc135110ebaaa6320a"
@@ -1645,6 +1652,14 @@ camelcase@^1.0.2:
 camelcase@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
+
+caniuse-db@^1.0.30000794:
+  version "1.0.30000813"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000813.tgz#e0a1c603f8880ad787b2a35652b2733f32a5e29a"
+
+caniuse-lite@^1.0.30000792:
+  version "1.0.30000813"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000813.tgz#7b25e27fdfb8d133f3c932b01f77452140fcc6c9"
 
 caniuse-lite@^1.0.30000809:
   version "1.0.30000811"
@@ -2241,6 +2256,10 @@ ejs@^2.3.1:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.5.7.tgz#cc872c168880ae3c7189762fd5ffc00896c9518a"
 
+electron-to-chromium@^1.3.30:
+  version "1.3.36"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.36.tgz#0eabf71a9ebea9013fb1cc35a390e068624f27e8"
+
 electron-to-chromium@^1.3.33:
   version "1.3.34"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.34.tgz#d93498f40391bb0c16a603d8241b9951404157ed"
@@ -2336,6 +2355,16 @@ eslint-config-prettier@^2.9.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-2.9.0.tgz#5ecd65174d486c22dff389fe036febf502d468a3"
   dependencies:
     get-stdin "^5.0.1"
+
+eslint-plugin-compat@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-compat/-/eslint-plugin-compat-2.2.0.tgz#d612a9988d9fba66bcd8e86fcc1b551753aac995"
+  dependencies:
+    babel-runtime "^6.26.0"
+    browserslist "^2.11.3"
+    caniuse-db "^1.0.30000794"
+    mdn-browser-compat-data "^0.0.20"
+    requireindex "^1.1.0"
 
 eslint-plugin-flowtype-errors@^3.5.1:
   version "3.5.1"
@@ -2536,7 +2565,7 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@^3.0.0, extend@~3.0.0, extend@~3.0.1:
+extend@3.0.1, extend@^3.0.0, extend@~3.0.0, extend@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
 
@@ -4311,6 +4340,12 @@ md5.js@^1.3.4:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+mdn-browser-compat-data@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/mdn-browser-compat-data/-/mdn-browser-compat-data-0.0.20.tgz#26e4a226d96cc5318fdc504d6dfd86907752da5c"
+  dependencies:
+    extend "3.0.1"
+
 mem-fs-editor@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/mem-fs-editor/-/mem-fs-editor-3.0.2.tgz#dd0a6eaf2bb8a6b37740067aa549eb530105af9f"
@@ -5431,6 +5466,10 @@ require-uncached@^1.0.3:
   dependencies:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
+
+requireindex@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

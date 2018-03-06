@@ -8,18 +8,19 @@ module.exports = {
   plugins: [
     'flowtype',
     'flowtype-errors',
+    'compat',
   ],
   parserOptions: {
     ecmaVersion: 6,
   },
   env: {
     jest: true,
-    node: true,
     browser: true,
   },
   rules: {
     'flowtype-errors/show-errors': 2,
     "flowtype-errors/enforce-min-coverage": [2, 90],
+    'compat/compat': 'error',
     'prettier/prettier': [
       'error',
       {
