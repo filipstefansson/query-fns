@@ -1,5 +1,6 @@
 /* @flow */
 import { parse } from './formatters/default';
+import extend from './utils/extend';
 
 /**
  * Parse a query string.
@@ -12,13 +13,12 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
   if (!query || typeof query !== 'string') return (Object.create(null): any);
 
   // create options
-  const options: ParseOptions = Object.assign(
-    {},
+  const options: ParseOptions = extend(
     {
       formatters: [],
       decode: true,
     },
-    opts,
+    opts || {},
   );
   const { formatters, decode }: ParseOptions = options;
 

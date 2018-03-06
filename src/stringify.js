@@ -1,6 +1,7 @@
 /* @flow */
 import { stringify } from './formatters/default';
 import encodeString from './utils/encode';
+import extend from './utils/extend';
 
 /**
  * Create a query string from an object
@@ -12,18 +13,17 @@ export default (params: ?Object, opts: StringifyOptions): string => {
   if (!params || typeof params !== 'object') return '';
 
   // create options
-  const options: StringifyOptions = Object.assign(
-    {},
+  const options: StringifyOptions = extend(
     {
       formatters: [],
       encode: true,
     },
-    opts,
+    opts || {},
   );
   const { formatters, encode }: StringifyOptions = options;
 
   // create new params object
-  const paramsObject: Object = Object.assign({}, params);
+  const paramsObject: Object = extend({}, params);
 
   // go through params and create array of key=value strings
   const paramsArray: string[] = Object.keys(paramsObject)
