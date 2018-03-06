@@ -14,6 +14,8 @@ module.exports = {
   },
   env: {
     jest: true,
+    node: true,
+    browser: true,
   },
   rules: {
     'flowtype-errors/show-errors': 2,

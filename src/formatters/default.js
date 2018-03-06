@@ -1,7 +1,7 @@
 /* @flow */
 import encodeString from '../utils/encode';
 
-const parse: Function = (
+export const parse: Function = (
   key: string,
   value: string,
   accumulator: ParamsObject,
@@ -12,7 +12,7 @@ const parse: Function = (
   return [].concat(accumulator[key], value);
 };
 
-const stringify: Function = (
+export const stringify: Function = (
   key: string,
   value: Value,
   options: StringifyOptions,
@@ -41,9 +41,4 @@ const stringify: Function = (
   }
 
   return null;
-};
-
-export default {
-  parse,
-  stringify,
 };

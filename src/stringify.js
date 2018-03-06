@@ -1,5 +1,5 @@
 /* @flow */
-import { defaultFormatter } from './formatters';
+import { stringify } from './formatters/default';
 import encodeString from './utils/encode';
 
 /**
@@ -51,7 +51,7 @@ export default (params: ?Object, opts: StringifyOptions): string => {
       );
 
       // use defaultFormatter to create the key:value string
-      const stringified: string = defaultFormatter.stringify(
+      const stringified: string = stringify(
         reduced.key,
         reduced.value,
         options,

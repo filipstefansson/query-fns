@@ -1,6 +1,10 @@
 module.exports = {
+  entry: {
+    index: './src/index.js',
+    parse: './src/parse.js',
+    stringify: './src/stringify.js',
+  },
   output: {
-    filename: 'search-params.js',
     library: 'searchParams',
     libraryTarget: 'umd',
   },

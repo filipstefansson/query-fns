@@ -1,5 +1,5 @@
 /* @flow */
-import { defaultFormatter } from './formatters';
+import { parse } from './formatters/default';
 
 /**
  * Parse a query string.
@@ -48,11 +48,7 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
           : null;
 
       // run default formatter before the user defined ones
-      paramsObj[key] = defaultFormatter.parse(
-        key,
-        decode ? value : param.value,
-        paramsObj,
-      );
+      paramsObj[key] = parse(key, decode ? value : param.value, paramsObj);
 
       // pass key, value and current params object to the formatters
       formatters.forEach((formatter: Formatter) => {
