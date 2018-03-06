@@ -1,7 +1,7 @@
 /* @flow */
 import encodeString from '../utils/encode';
 
-const parse = (key: string, value: Value): Value => {
+const parse: ParseFormatter = (key: string, value: Value): Value => {
   // early exit
   if (!value || value === '') return value;
   // handle array by calling parse recursively
@@ -24,12 +24,12 @@ const parse = (key: string, value: Value): Value => {
 const stringify: StringifyFormatter = (
   key: string,
   value: Value,
-  options: StringifyOptions,
+  options: ?StringifyOptions,
 ): Param => {
   // if value is an array, we go through it and add | between the items
   if (Array.isArray(value)) {
     // encode values if encode option is true
-    const newValue = (!options.encode
+    const newValue = (options && !options.encode
       ? value
       : value.map((val: Value) => {
           if (typeof val === 'string') {

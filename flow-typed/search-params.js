@@ -9,7 +9,8 @@ declare type ParamsObject = {
   [string]: Value,
 };
 
-declare type StringifyFormatter = (string, Value, StringifyOptions) => Param;
+declare type StringifyFormatter = (string, Value, ?StringifyOptions) => Param;
+declare type ParseFormatter = (string, Value, ?ParseOptions) => Value;
 
 declare type Formatter = { parse: Function, stringify: StringifyFormatter };
 
