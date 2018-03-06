@@ -3,6 +3,9 @@ module.exports = {
     index: './src/index.js',
     parse: './src/parse.js',
     stringify: './src/stringify.js',
+    'formatters/index': './src/formatters/index',
+    'formatters/pipeArray': './src/formatters/pipeArray',
+    'utils/encode': './src/utils/encode',
   },
   output: {
     library: 'searchParams',

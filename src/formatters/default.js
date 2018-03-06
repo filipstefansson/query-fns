@@ -42,3 +42,8 @@ export const stringify: Function = (
 
   return null;
 };
+
+export default {
+  stringify,
+  parse,
+};
