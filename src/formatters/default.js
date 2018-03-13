@@ -5,11 +5,11 @@ export const parse: Function = (
   key: string,
   value: string,
   accumulator: ParamsObject,
-): Value => {
+): Param => {
   // if there's no previous value, just add it
-  if (accumulator[key] === undefined) return value;
+  if (accumulator[key] === undefined) return { key, value };
   // if there's a previous value, add new value to that
-  return [].concat(accumulator[key], value);
+  return { key, value: [].concat(accumulator[key], value) };
 };
 
 export const stringify: Function = (

@@ -1,5 +1,5 @@
 import { parse } from '../src';
-import { pipeArrayFormatter } from '../src/formatters';
+import { defaultFormatter, JSONAPIFormatter } from '../src/formatters';
 
 describe('parse', () => {
   it('should not be null', () => {
@@ -69,54 +69,66 @@ describe('parse', () => {
   });
 
   it('can handle faulty formatters', () => {
-    expect(parse('foo=bar', { formatters: [null] })).toEqual({ foo: 'bar' });
-  });
-
-  it('can parse pipe arrays', () => {
-    expect(
-      parse('foo=bar|baz&qux=quux', { formatters: [pipeArrayFormatter] }),
-    ).toEqual({
-      foo: ['bar', 'baz'],
-      qux: 'quux',
+    expect(parse('foo=bar', { formatters: [JSONAPIFormatter, null] })).toEqual({
+      foo: 'bar',
     });
   });
 
-  it('preserves order of pipe array values', () => {
+  it('can parse jsonapi format', () => {
     expect(
-      parse('foo=bar|baz&qux=baz|bar', { formatters: [pipeArrayFormatter] }),
-    ).toEqual({
-      foo: ['bar', 'baz'],
-      qux: ['baz', 'bar'],
-    });
+      parse('?foo[bar]=qux&qux=quux', { formatters: [JSONAPIFormatter] }),
+    ).toEqual({ foo: { bar: ['qux'] }, qux: 'quux' });
   });
 
-  it('can parse array with pipe arrays', () => {
+  it('can parse jsonapi format - array', () => {
     expect(
-      parse('foo=baz&foo=bar|baz&qux=quux', {
-        formatters: [pipeArrayFormatter],
+      parse('?foo[bar]=qux,quux', { formatters: [JSONAPIFormatter] }),
+    ).toEqual({ foo: { bar: ['qux', 'quux'] } });
+  });
+
+  it('can parse jsonapi format - multiple arrays', () => {
+    expect(
+      parse('?foo[bar]=qux,quux&bar[foo]=quux,qux', {
+        formatters: [JSONAPIFormatter],
       }),
-    ).toEqual({
-      foo: ['baz', ['bar', 'baz']],
-      qux: 'quux',
-    });
+    ).toEqual({ foo: { bar: ['qux', 'quux'] }, bar: { foo: ['quux', 'qux'] } });
   });
 
-  it('can parse pipe arrays with bad values', () => {
+  it('can parse jsonapi format - weird keys', () => {
     expect(
-      parse('foo=bar| | baz&qux', { formatters: [pipeArrayFormatter] }),
-    ).toEqual({
-      foo: ['bar', 'baz'],
-      qux: null,
-    });
-    expect(parse({}, { formatters: [pipeArrayFormatter] })).toEqual({});
-  });
-
-  it('can parse values without pipes', () => {
+      parse('?foo[bar=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ 'foo[bar': 'qux' });
     expect(
-      parse('foo=bar&foo=baz&qux', { formatters: [pipeArrayFormatter] }),
-    ).toEqual({
-      foo: ['bar', 'baz'],
-      qux: null,
-    });
+      parse('?foobar]=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ 'foobar]': 'qux' });
+    expect(
+      parse('?foo[bar]a=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ 'foo[bar]a': 'qux' });
+    expect(
+      parse('?fo[o[bar]=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ fo: { 'o[bar': ['qux'] } });
+    expect(
+      parse('?foo[[ba]r]=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ foo: { '[ba]r': ['qux'] } });
+    expect(
+      parse('?foo[[ba]]r]=qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ foo: { '[ba]]r': ['qux'] } });
+    expect(
+      parse('?[foo]=bar,qux', {
+        formatters: [JSONAPIFormatter],
+      }),
+    ).toEqual({ '': { foo: ['bar', 'qux'] } });
   });
 });

@@ -36,10 +36,13 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
       return { key, value };
     });
 
+  // create a new object that formatters can edit
+  const newParams: ParamsObject = {};
+
   // reduce array in to an object we can return
   // Object.create(null) creates a new object without prototype
   const reduced: ParamsObject = params.reduce(
-    (paramsObj: ParamsObject, param: Param) => {
+    (source: ParamsObject, param: Param) => {
       // set initial value
       const key: string = decode ? decodeURIComponent(param.key) : param.key;
       const value: Value =
@@ -47,17 +50,21 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
           ? decodeURIComponent(param.value)
           : null;
 
-      // run default formatter before the user defined ones
-      paramsObj[key] = parse(key, decode ? value : param.value, paramsObj);
+      // run default formatter if formatters array is empty
+      if (formatters.length === 0) {
+        const defaultParam = parse(key, decode ? value : param.value, source);
+        source[defaultParam.key] = defaultParam.value;
+      }
 
       // pass key, value and current params object to the formatters
       formatters.forEach((formatter: Formatter) => {
         if (!formatter || typeof formatter.parse !== 'function') return;
-        const newValue: any = formatter.parse(key, paramsObj[key], paramsObj);
-        paramsObj[key] = newValue;
+        const newParam: Param = formatter.parse(key, value, newParams);
+        newParams[newParam.key] = newParam.value;
       });
 
-      return paramsObj;
+      // if we have 0 formatters, return source instead.
+      return formatters.length > 0 ? newParams : source;
     },
     (Object.create(null): any),
   );

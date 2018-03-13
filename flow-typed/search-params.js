@@ -1,4 +1,4 @@
-declare type Value = ?string | (?Value)[];
+declare type Value = ?string | (?Value)[] | { [string]: Value };
 
 declare type Param = {
   key: string,
@@ -10,7 +10,7 @@ declare type ParamsObject = {
 };
 
 declare type StringifyFormatter = (string, Value, ?StringifyOptions) => Param;
-declare type ParseFormatter = (string, Value, ?ParseOptions) => Value;
+declare type ParseFormatter = (string, Value, ?ParseOptions) => Param;
 
 declare type Formatter = { parse: Function, stringify: StringifyFormatter };
 
