@@ -1,5 +1,5 @@
 import { stringify } from '../src';
-import { pipeArrayFormatter } from '../src/formatters';
+import { JSONAPIFormatter } from '../src/formatters';
 
 describe('stringify', () => {
   it('should not be null', () => {
@@ -68,48 +68,66 @@ describe('stringify', () => {
     );
   });
 
-  it('can stringify to pipe arrays', () => {
+  it('can stringify to json api', () => {
     expect(
-      stringify(
-        {
-          foo: ['bar', 'baz'],
-          qux: 'quux',
-        },
-        { formatters: [pipeArrayFormatter] },
-      ),
-    ).toEqual('foo=bar|baz&qux=quux');
+      stringify({ foo: { bar: ['qux'] } }, { formatter: JSONAPIFormatter }),
+    ).toEqual('foo[bar]=qux');
   });
 
-  it('can stringify to pipe arrays and URI encode', () => {
+  it('can stringify non array to json api', () => {
     expect(
-      stringify(
-        {
-          fåå: ['bår', 'båz'],
-        },
-        { formatters: [pipeArrayFormatter] },
-      ),
-    ).toEqual('f%C3%A5%C3%A5=b%C3%A5r|b%C3%A5z');
+      stringify({ foo: { bar: 'qux' } }, { formatter: JSONAPIFormatter }),
+    ).toEqual('foo[bar]=qux');
   });
 
-  it('can stringify to pipe arrays and not URI encode', () => {
+  it('can stringify multiple values to json api', () => {
     expect(
       stringify(
-        {
-          fåå: ['bår', 'båz'],
-        },
-        { formatters: [pipeArrayFormatter], encode: false },
+        { foo: { bar: ['qux'], qux: ['baz'] } },
+        { formatter: JSONAPIFormatter },
       ),
-    ).toEqual('fåå=bår|båz');
+    ).toEqual('foo[bar]=qux&foo[qux]=baz');
   });
 
-  it('can stringify to pipe arrays and handle bad input', () => {
+  it('can stringify multiple values with arrays to json api', () => {
     expect(
       stringify(
-        {
-          foo: ['bar', null, ' ', '', 'baz'],
-        },
-        { formatters: [pipeArrayFormatter] },
+        { foo: { bar: ['qux', 'quux'], qux: ['baz', 'bar'] } },
+        { formatter: JSONAPIFormatter },
       ),
-    ).toEqual('foo=bar|baz');
+    ).toEqual('foo[bar]=qux,quux&foo[qux]=baz,bar');
+  });
+
+  it('can stringify array to json api', () => {
+    expect(
+      stringify(
+        { foo: { bar: ['qux', 'baz'] } },
+        { formatter: JSONAPIFormatter },
+      ),
+    ).toEqual('foo[bar]=qux,baz');
+  });
+
+  it('can jsonapi stringify non nested array', () => {
+    expect(
+      stringify({ foo: ['qux', 'baz'] }, { formatter: JSONAPIFormatter }),
+    ).toEqual('foo=qux,baz');
+  });
+
+  it('can jsonapi stringify plain value', () => {
+    expect(
+      stringify({ foo: 'bar', baz: 'qux' }, { formatter: JSONAPIFormatter }),
+    ).toEqual('foo=bar&baz=qux');
+  });
+
+  it('can jsonapi stringify plain value', () => {
+    expect(
+      stringify({ foo: 'bar', baz: 'qux' }, { formatter: JSONAPIFormatter }),
+    ).toEqual('foo=bar&baz=qux');
+  });
+
+  it('can jsonapi stringify a bad value', () => {
+    expect(stringify({ foo: null }, { formatter: JSONAPIFormatter })).toEqual(
+      'foo',
+    );
   });
 });

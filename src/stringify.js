@@ -1,6 +1,5 @@
 /* @flow */
 import { stringify } from './formatters/default';
-import encodeString from './utils/encode';
 import extend from './utils/extend';
 
 /**
@@ -20,7 +19,7 @@ export default (params: ?Object, opts: StringifyOptions): string => {
     },
     opts || {},
   );
-  const { formatters, encode }: StringifyOptions = options;
+  const { formatter }: StringifyOptions = options;
 
   // create new params object
   const paramsObject: Object = extend({}, params);
@@ -33,29 +32,16 @@ export default (params: ?Object, opts: StringifyOptions): string => {
       // remove bad strings
       if (typeof value === 'string' && value.trim() === '') return false;
 
-      // include if good
-      return value && value.length > 0;
+      // include if array and not empty
+      if (Array.isArray(value) && value.length > 0) return true;
+
+      // include if object or string
+      return typeof value === 'object' || typeof value === 'string';
     })
     .map((key: string) => {
-      const encodedKey: string = encode ? encodeString(key) : key;
-
-      // pass key, value to the formatters
-      const reduced: Param = formatters.reduce(
-        (previous: Param, formatter: Formatter) => {
-          if (!formatter || typeof formatter.stringify !== 'function') {
-            return previous;
-          }
-          return formatter.stringify(previous.key, previous.value, options);
-        },
-        ({ key: encodedKey, value: paramsObject[key] }: Param),
-      );
-
-      // use defaultFormatter to create the key:value string
-      const stringified: string = stringify(
-        reduced.key,
-        reduced.value,
-        options,
-      );
+      const stringified: string = formatter
+        ? formatter.stringify(key, paramsObject[key], options)
+        : stringify(key, paramsObject[key], options);
 
       return stringified;
     });

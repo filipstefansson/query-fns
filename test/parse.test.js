@@ -1,5 +1,5 @@
 import { parse } from '../src';
-import { defaultFormatter, JSONAPIFormatter } from '../src/formatters';
+import { JSONAPIFormatter } from '../src/formatters';
 
 describe('parse', () => {
   it('should not be null', () => {

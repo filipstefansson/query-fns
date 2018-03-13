@@ -30,8 +30,34 @@ const stringify: StringifyFormatter = (
   key: string,
   value: Value,
   options: ?StringifyOptions,
-): Param => {
-  return { key, value };
+): string => {
+  if (Array.isArray(value)) {
+    // handle array
+    return `${key}=${value.join(',')}`;
+  } else if (value && typeof value === 'object') {
+    // handle object
+    const newParam: string[] = Object.keys(value).map((nestedKey: string) => {
+      // tell flow that this is an object
+      // TODO: figure out why flow thinks value is an array here
+      const valueObject: Object = (value: any);
+      // extranct the nested value. Will be an array of string or a string
+      let nestedValue: string | string[] = valueObject[nestedKey];
+      // if it's a string, join it by ,
+      nestedValue = Array.isArray(nestedValue)
+        ? valueObject[nestedKey].join(',')
+        : nestedValue;
+
+      return `${key}[${nestedKey}]=${nestedValue}`;
+    });
+
+    return newParam.join('&');
+  }
+  // handle string
+  if (typeof value === 'string') {
+    return `${key}=${value}`;
+  }
+  // worst case :(
+  return key;
 };
 
 export default {

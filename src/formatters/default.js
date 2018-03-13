@@ -22,7 +22,7 @@ export const stringify: Function = (
       .map((val: Value) => {
         if (typeof val === 'string' && val.trim() !== '') {
           return options.encode
-            ? `${key}=${encodeString(val.trim())}`
+            ? `${encodeString(key)}=${encodeString(val.trim())}`
             : `${key}=${val.trim()}`;
         }
       })
@@ -37,7 +37,11 @@ export const stringify: Function = (
       options.encode && options.formatters.length === 0
         ? encodeString(value)
         : value;
-    return `${key}=${newValue}`;
+    const newKey: string =
+      options.encode && options.formatters.length === 0
+        ? encodeString(key)
+        : key;
+    return `${newKey}=${newValue}`;
   }
 
   return null;
