@@ -20,7 +20,7 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
     },
     opts || {},
   );
-  const { formatters, decode }: ParseOptions = options;
+  const { formatter, decode }: ParseOptions = options;
 
   // remove spaces and any ?&# in the beginning of the string
   const queryString: string = query.trim().replace(/^[?#&]/, '');
@@ -51,20 +51,16 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
           : null;
 
       // run default formatter if formatters array is empty
-      if (formatters.length === 0) {
+      if (formatter) {
+        const newParam: Param = formatter.parse(key, value, newParams);
+        newParams[newParam.key] = newParam.value;
+      } else {
         const defaultParam = parse(key, decode ? value : param.value, source);
         source[defaultParam.key] = defaultParam.value;
       }
 
-      // pass key, value and current params object to the formatters
-      formatters.forEach((formatter: Formatter) => {
-        if (!formatter || typeof formatter.parse !== 'function') return;
-        const newParam: Param = formatter.parse(key, value, newParams);
-        newParams[newParam.key] = newParam.value;
-      });
-
       // if we have 0 formatters, return source instead.
-      return formatters.length > 0 ? newParams : source;
+      return formatter ? newParams : source;
     },
     (Object.create(null): any),
   );

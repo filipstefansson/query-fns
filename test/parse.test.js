@@ -69,27 +69,27 @@ describe('parse', () => {
   });
 
   it('can handle faulty formatters', () => {
-    expect(parse('foo=bar', { formatters: [JSONAPIFormatter, null] })).toEqual({
+    expect(parse('foo=bar', { formatter: null })).toEqual({
       foo: 'bar',
     });
   });
 
   it('can parse jsonapi format', () => {
     expect(
-      parse('?foo[bar]=qux&qux=quux', { formatters: [JSONAPIFormatter] }),
+      parse('?foo[bar]=qux&qux=quux', { formatter: JSONAPIFormatter }),
     ).toEqual({ foo: { bar: ['qux'] }, qux: 'quux' });
   });
 
   it('can parse jsonapi format - array', () => {
     expect(
-      parse('?foo[bar]=qux,quux', { formatters: [JSONAPIFormatter] }),
+      parse('?foo[bar]=qux,quux', { formatter: JSONAPIFormatter }),
     ).toEqual({ foo: { bar: ['qux', 'quux'] } });
   });
 
   it('can parse jsonapi format - multiple arrays', () => {
     expect(
       parse('?foo[bar]=qux,quux&bar[foo]=quux,qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ foo: { bar: ['qux', 'quux'] }, bar: { foo: ['quux', 'qux'] } });
   });
@@ -97,37 +97,37 @@ describe('parse', () => {
   it('can parse jsonapi format - weird keys', () => {
     expect(
       parse('?foo[bar=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ 'foo[bar': 'qux' });
     expect(
       parse('?foobar]=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ 'foobar]': 'qux' });
     expect(
       parse('?foo[bar]a=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ 'foo[bar]a': 'qux' });
     expect(
       parse('?fo[o[bar]=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ fo: { 'o[bar': ['qux'] } });
     expect(
       parse('?foo[[ba]r]=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ foo: { '[ba]r': ['qux'] } });
     expect(
       parse('?foo[[ba]]r]=qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ foo: { '[ba]]r': ['qux'] } });
     expect(
       parse('?[foo]=bar,qux', {
-        formatters: [JSONAPIFormatter],
+        formatter: JSONAPIFormatter,
       }),
     ).toEqual({ '': { foo: ['bar', 'qux'] } });
   });

@@ -14,14 +14,12 @@ declare type ParseFormatter = (string, Value, ?ParseOptions) => Param;
 
 declare type Formatter = { parse: Function, stringify: StringifyFormatter };
 
-declare type Formatters = Formatter[];
-
 declare type StringifyOptions = {
   formatter: Formatter,
   encode: boolean,
 };
 
 declare type ParseOptions = {
-  formatters: Formatters,
+  formatter: Formatter,
   decode: boolean,
 };
