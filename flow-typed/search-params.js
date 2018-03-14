@@ -1,25 +1,33 @@
-declare type Value = ?string | (?Value)[] | { [string]: Value };
-
 declare type Param = {
   key: string,
-  value: Value,
+  value: Object | ?string | Array<mixed>,
 };
 
-declare type ParamsObject = {
-  [string]: Value,
+declare type QueryParam = {
+  key: string,
+  value: ?string,
 };
 
-declare type StringifyFormatter = (string, Value, ?StringifyOptions) => string;
-declare type ParseFormatter = (string, Value, ?ParseOptions) => Param;
+declare type StringifyFormatter = (
+  string,
+  Object | ?string,
+  Object,
+  StringifyOptions,
+) => string;
 
-declare type Formatter = { parse: Function, stringify: StringifyFormatter };
+declare type ParseFormatter = (string, ?string, Object, ParseOptions) => Param;
+
+declare type Formatter = {
+  parse: ParseFormatter,
+  stringify: StringifyFormatter,
+};
 
 declare type StringifyOptions = {
-  formatter: Formatter,
+  formatter: ?Formatter,
   encode: boolean,
 };
 
 declare type ParseOptions = {
-  formatter: Formatter,
+  formatter: ?Formatter,
   decode: boolean,
 };

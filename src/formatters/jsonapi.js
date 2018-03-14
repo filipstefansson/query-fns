@@ -1,21 +1,37 @@
 /* @flow */
 import encodeString from '../utils/encode';
 
-const parse: ParseFormatter = (key: string, value: Value): Param => {
-  // early exit
-  // if (!value || value === '') return { key, value };
-  // get key
+const parse: ParseFormatter = (
+  key: string,
+  value: ?string,
+  accumulator: Object,
+  options: ParseOptions,
+): Param => {
+  const { decode } = options;
   const parts: string[] = key.split(/\[(.+)/);
-  let newKey: string = parts[0];
+  let newKey: string = decode ? decodeURIComponent(parts[0]) : parts[0];
 
   // copy value
-  let newValue: Value = value;
+  let newValue: Object | ?string = value;
 
   // is there an object to parsed here? eg: foo[bar]
-  if (parts.length > 1 && parts[1].endsWith(']') && typeof value === 'string') {
+  if (parts.length > 1 && parts[1].endsWith(']')) {
     newValue = {};
     const nestedKey: string = parts[1].slice(0, -1);
-    newValue[nestedKey] = value.split(',');
+    if (typeof value === 'string') {
+      newValue[nestedKey] = value
+        .split(',')
+        .map((val: string) => (decode ? decodeURIComponent(val) : val));
+    } else {
+      // handle empty value
+      newValue[nestedKey] = null;
+    }
+  } else {
+    // if key is a plain string(no nested object), value will be a string
+    newValue =
+      decode && typeof newValue === 'string'
+        ? decodeURIComponent(newValue)
+        : newValue;
   }
 
   // if there's no ending bracked, return original key
@@ -28,12 +44,14 @@ const parse: ParseFormatter = (key: string, value: Value): Param => {
 
 const stringify: StringifyFormatter = (
   key: string,
-  value: Value,
-  options: ?StringifyOptions,
+  value: Object | ?string,
+  source: Object,
+  options: StringifyOptions,
 ): string => {
+  const newKey = options.encode ? encodeString(key) : key;
   if (Array.isArray(value)) {
     // handle array
-    return `${key}=${value.join(',')}`;
+    return `${newKey}=${value.join(',')}`;
   } else if (value && typeof value === 'object') {
     // handle object
     const newParam: string[] = Object.keys(value).map((nestedKey: string) => {
@@ -44,20 +62,23 @@ const stringify: StringifyFormatter = (
       let nestedValue: string | string[] = valueObject[nestedKey];
       // if it's a string, join it by ,
       nestedValue = Array.isArray(nestedValue)
-        ? valueObject[nestedKey].join(',')
-        : nestedValue;
+        ? valueObject[nestedKey]
+            .map((val: string) => (options.encode ? encodeString(val) : val))
+            .join(',')
+        : options.encode ? encodeString(nestedValue) : nestedValue;
 
-      return `${key}[${nestedKey}]=${nestedValue}`;
+      return `${newKey}[${nestedKey}]=${nestedValue}`;
     });
 
     return newParam.join('&');
   }
   // handle string
   if (typeof value === 'string') {
-    return `${key}=${value}`;
+    const newValue = options.encode ? encodeString(value) : value;
+    return `${newKey}=${newValue}`;
   }
-  // worst case :(
-  return key;
+  // if there is no value
+  return newKey;
 };
 
 export default {

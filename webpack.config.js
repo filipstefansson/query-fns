@@ -4,7 +4,7 @@ module.exports = {
     parse: './src/parse.js',
     stringify: './src/stringify.js',
     'formatters/index': './src/formatters/index',
-    'formatters/pipeArray': './src/formatters/pipeArray',
+    'formatters/jsonapi': './src/formatters/jsonapi',
     'utils/encode': './src/utils/encode',
   },
   output: {

@@ -6,9 +6,9 @@ import extend from './utils/extend';
  * Parse a query string.
  *
  * @param  {string} string A query string
- * @return {ParamsObject}        The query string params
+ * @return {Object}        The query string params
  */
-export default (query: string, opts: ParseOptions): ParamsObject => {
+export default (query: string, opts: ParseOptions): Object => {
   // early exit
   if (!query || typeof query !== 'string') return (Object.create(null): any);
 
@@ -20,47 +20,36 @@ export default (query: string, opts: ParseOptions): ParamsObject => {
     },
     opts || {},
   );
-  const { formatter, decode }: ParseOptions = options;
+  const { formatter }: ParseOptions = options;
 
   // remove spaces and any ?&# in the beginning of the string
   const queryString: string = query.trim().replace(/^[?#&]/, '');
 
   // split query in to an array of { key: ..., value: ...} objects
-  const params: Param[] = queryString
+  const params: QueryParam[] = queryString
     .split('&')
-    .filter(param => !!param)
-    .map((param: string): Param => {
+    .filter((param: string) => !!param)
+    .map((param: string): QueryParam => {
       const parts: string[] = param.split('=');
       const key: string = parts.shift();
-      const value: Value = parts.length > 0 ? parts.join('=') : null;
-      return { key, value };
+      const value: ?string = parts.length > 0 ? parts.join('=') : null;
+      return ({ key, value }: QueryParam);
     });
-
-  // create a new object that formatters can edit
-  const newParams: ParamsObject = {};
 
   // reduce array in to an object we can return
   // Object.create(null) creates a new object without prototype
-  const reduced: ParamsObject = params.reduce(
-    (source: ParamsObject, param: Param) => {
-      // set initial value
-      const key: string = decode ? decodeURIComponent(param.key) : param.key;
-      const value: Value =
-        typeof param.value === 'string'
-          ? decodeURIComponent(param.value)
-          : null;
+  const reduced: Object = params.reduce(
+    (accumulator: Object, param: QueryParam) => {
+      const { key, value } = param;
 
       // run default formatter if formatters array is empty
-      if (formatter) {
-        const newParam: Param = formatter.parse(key, value, newParams);
-        newParams[newParam.key] = newParam.value;
-      } else {
-        const defaultParam = parse(key, decode ? value : param.value, source);
-        source[defaultParam.key] = defaultParam.value;
-      }
+      const newParam: Param = formatter
+        ? formatter.parse(key, value, accumulator, options)
+        : parse(key, value, accumulator, options);
 
-      // if we have 0 formatters, return source instead.
-      return formatter ? newParams : source;
+      // set new value
+      accumulator[newParam.key] = newParam.value;
+      return accumulator;
     },
     (Object.create(null): any),
   );

@@ -131,4 +131,27 @@ describe('parse', () => {
       }),
     ).toEqual({ '': { foo: ['bar', 'qux'] } });
   });
+
+  it('can parse jsonapi format - empty value', () => {
+    expect(
+      parse('?foo[bar]', {
+        formatter: JSONAPIFormatter,
+      }),
+    ).toEqual({ foo: { bar: null } });
+  });
+
+  it('can parse jsonapi format - disable encoding', () => {
+    expect(
+      parse('?foo[bar]=b%C3%A5z%20', {
+        formatter: JSONAPIFormatter,
+        decode: false,
+      }),
+    ).toEqual({ foo: { bar: ['b%C3%A5z%20'] } });
+    expect(
+      parse('?foo=b%C3%A5z%20', {
+        formatter: JSONAPIFormatter,
+        decode: false,
+      }),
+    ).toEqual({ foo: 'b%C3%A5z%20' });
+  });
 });

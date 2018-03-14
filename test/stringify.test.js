@@ -130,4 +130,37 @@ describe('stringify', () => {
       'foo',
     );
   });
+
+  it('can jsonapi stringify with URI encoding', () => {
+    expect(
+      stringify(
+        { 'foo bar': { bar: ["q'ux", 'baz'] } },
+        { formatter: JSONAPIFormatter },
+      ),
+    ).toEqual('foo%20bar[bar]=q%27ux,baz');
+    expect(stringify({ foo: 'b ar' }, { formatter: JSONAPIFormatter })).toEqual(
+      'foo=b%20ar',
+    );
+  });
+
+  it('can jsonapi stringify without encoding', () => {
+    expect(
+      stringify(
+        { 'f oo': 'bar' },
+        { formatter: JSONAPIFormatter, encode: false },
+      ),
+    ).toEqual('f oo=bar');
+    expect(
+      stringify(
+        { 'foo bar': { bar: ["q'ux", 'baz'] } },
+        { formatter: JSONAPIFormatter, encode: false },
+      ),
+    ).toEqual("foo bar[bar]=q'ux,baz");
+    expect(
+      stringify(
+        { foo: { bar: 'q ux' } },
+        { formatter: JSONAPIFormatter, encode: false },
+      ),
+    ).toEqual('foo[bar]=q ux');
+  });
 });
