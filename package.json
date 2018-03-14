@@ -7,8 +7,10 @@
   "author": "Filip Stefansson",
   "license": "MIT",
   "scripts": {
+    "start": "jest --watch",
     "build": "webpack --mode production",
-    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "jest",
+    "test-ci": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "browserslist": [
