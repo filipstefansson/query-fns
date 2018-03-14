@@ -131,12 +131,12 @@ formatter on every value in that array.
 
 The expected return is an `Object` containing `{ key: string, value: any }`.
 
-parameter        | type          | description                                 |
------------------|---------------|---------------------------------------------|
-key              | `string`      | Whatever is on the left side of the `=`.    |
-value            | `string`      | Whatever is on the right side of the `=`.   |
-accumulator      | `string`      | The current output value.                   |
-options          | `Object`      | [The options object](#parsestring-options). |
+parameter        | type          | description                                         |
+-----------------|---------------|-----------------------------------------------------|
+key              | `string`      | Whatever is on the left side of the `=`.            |
+value            | `string`      | Whatever is on the right side of the `=`.           |
+accumulator      | `string`      | The current output value.                           |
+options          | `Object`      | [The options object](#parsestring-options--object). |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `decode`. The library won't do any formatting for you.
@@ -148,12 +148,12 @@ input value, and it's up to your formatter to reduce that in to an string.
 
 The expected return is a `string`.
 
-parameter        | type          | description                                     |
------------------|---------------|-------------------------------------------------|
-key              | `string`      | The property key.                               |
-value            | `any`         | The value for the current key.                  |
-source           | `Object`      | The object the user put in.                     |
-options          | `Object`      | [The options object](#stringifyobject-options). |
+parameter        | type          | description                                             |
+-----------------|---------------|---------------------------------------------------------|
+key              | `string`      | The property key.                                       |
+value            | `any`         | The value for the current key.                          |
+source           | `Object`      | The object the user put in.                             |
+options          | `Object`      | [The options object](#stringifyobject-options--string). |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `encode`. The library won't do any formatting for you.
@@ -172,9 +172,9 @@ This will start [jest](https://facebook.github.io/jest/) in `watch mode`. In
 this way you can develop new features and make sure that everything is working 
 as it should.
 
-The recommended way of creating new features is to first create the tests in
-either `test/parse.test.js` or `test/stringify.test.js`, and then make sure that
-they pass. 
+The recommended way of creating new features or formatters is to first create 
+the tests in either `test/parse.test.js` or `test/stringify.test.js`, and then 
+make sure that they pass. 
 
 It's also recommended that you run `yarn start` with the `--coverage` flag 
 before submitting any pull requests, to make sure that all your new code has
@@ -193,9 +193,11 @@ reproduce the problem.
 
 ### Pull requests
 
-If you want to help improve this libtparary, feel free to create a pull request
+If you want to help improve this library, feel free to create a pull request
 with new features or bugfixes. 
 
 The aim is to have:
   * 90%+ [flow](https://flow.org/) coverage
   * 100% test coverage
+
+To check this, refer to the [develop](#develop) section.
