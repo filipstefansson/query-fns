@@ -31,7 +31,7 @@ import parse from 'search-params/parse';
 
 ### Parse
 
-Use the `parse` method to convert a query string to an object.
+Use the `parse` method to convert a query string in to an object.
 
 ```js
 parse('?foo=bar');
@@ -43,7 +43,7 @@ parse('?foo=bar&baz=qee');
 
 ### Stringify
 
-Use the `stringify` method to convert an object to a query string.
+Use the `stringify` method to convert an object in to a query string.
 
 ```js
 stringify({ foo: 'bar' });
@@ -113,13 +113,13 @@ stringify                    | parse                                            
 ### Create your own formatter
 
 If none of the built-in formatters supports your format, it's easy to build your
-own. A formatter is basically an object with two functions; `parse` and 
-`stringify`.
+own. A formatter is an object with two properties with functions 
+as values; `parse` and `stringify`.
 
 ```js
 const myCustomFormatter = {
-  parse: (key, value, accumulator, options) => {},
-  stringify: (key, value, accumulator, options) => '',
+  parse: (key, value, accumulator, options) => { key: '', value: {} },
+  stringify: (key, value, source, options) => '',
 };
 
 parse('?foo=bar', { formatter: myCustomFormatter });
@@ -138,7 +138,7 @@ parameter        | type          | description                               |
 key              | `string`      | Whatever is on the left side of the `=`.  |
 value            | `string`      | Whatever is on the right side of the `=`. |
 accumulator      | `string`      | The current output value.                 |
-options          | `Object`      | [The options object](#options-1)          |
+options          | `Object`      | [The options object](#options-1).         |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `decode`. The library won't do any formatting for you.
@@ -150,12 +150,12 @@ input value, and it's up to your formatter to reduce that in to an string.
 
 The expected return is a `string`.
 
-parameter        | type          | description                      |
------------------|---------------|----------------------------------|
-key              | `string`      | The property key.                |
-value            | `any`         | The value for the current key.   |
-source           | `Object`      | The object the user put in.      |
-options          | `Object`      | [The options object](#options-2) |
+parameter        | type          | description                       |
+-----------------|---------------|-----------------------------------|
+key              | `string`      | The property key.                 |
+value            | `any`         | The value for the current key.    |
+source           | `Object`      | The object the user put in.       |
+options          | `Object`      | [The options object](#options-2). |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `encode`. The library won't do any formatting for you.
