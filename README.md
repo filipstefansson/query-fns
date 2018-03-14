@@ -1,4 +1,4 @@
-# [search-params](https://github.com/filipstefansson/search-params) &middot; [![Coverage Status](https://img.shields.io/coveralls/filipstefansson/search-params/master.svg?style=flat)](https://coveralls.io/github/filipstefansson/search-params?branch=master) [![CircleCI Status](https://circleci.com/gh/filipstefansson/search-params.svg?style=shield&circle-token=ab2228bfc68a2fe6184b96d9fb7436f29a6d1b10)](https://circleci.com/gh/filipstefansson/search-params) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/filipstefansson/search-params#contributing)
+# [search-params](https://github.com/filipstefansson/search-params) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/filipstefansson/search-params/blob/master/LICENSE) [![Coverage Status](https://img.shields.io/coveralls/filipstefansson/search-params/master.svg?style=flat)](https://coveralls.io/github/filipstefansson/search-params?branch=master) [![CircleCI Status](https://circleci.com/gh/filipstefansson/search-params.svg?style=shield&circle-token=ab2228bfc68a2fe6184b96d9fb7436f29a6d1b10)](https://circleci.com/gh/filipstefansson/search-params) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/filipstefansson/search-params#contributing)
 
 Parse and stringify URL search params.
 
@@ -55,16 +55,14 @@ stringify({ foo: 'bar', baz: 'qee' });
 
 ## API
 
-### parse(string, options)
-
-#### Options
+### parse(string, options) => Object
 
 option              | default          | description |
 --------------------|------------------|-------------|
 decode              | `true`           | Use `decodeURIComponent` on the keys and values before adding them to the returned object. |
 formatter           | `default`        | See [formatters section](#formatters). |
 
-### stringify(object, options)
+### stringify(object, options) => string
 
 option              | default          | description |
 --------------------|------------------|-------------|
@@ -133,12 +131,12 @@ formatter on every value in that array.
 
 The expected return is an `Object` containing `{ key: string, value: any }`.
 
-parameter        | type          | description                               |
------------------|---------------|-------------------------------------------|
-key              | `string`      | Whatever is on the left side of the `=`.  |
-value            | `string`      | Whatever is on the right side of the `=`. |
-accumulator      | `string`      | The current output value.                 |
-options          | `Object`      | [The options object](#options-1).         |
+parameter        | type          | description                                 |
+-----------------|---------------|---------------------------------------------|
+key              | `string`      | Whatever is on the left side of the `=`.    |
+value            | `string`      | Whatever is on the right side of the `=`.   |
+accumulator      | `string`      | The current output value.                   |
+options          | `Object`      | [The options object](#parsestring-options). |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `decode`. The library won't do any formatting for you.
@@ -150,14 +148,54 @@ input value, and it's up to your formatter to reduce that in to an string.
 
 The expected return is a `string`.
 
-parameter        | type          | description                       |
------------------|---------------|-----------------------------------|
-key              | `string`      | The property key.                 |
-value            | `any`         | The value for the current key.    |
-source           | `Object`      | The object the user put in.       |
-options          | `Object`      | [The options object](#options-2). |
+parameter        | type          | description                                     |
+-----------------|---------------|-------------------------------------------------|
+key              | `string`      | The property key.                               |
+value            | `any`         | The value for the current key.                  |
+source           | `Object`      | The object the user put in.                     |
+options          | `Object`      | [The options object](#stringifyobject-options). |
 
 *Important:* If you build your own formatter, it's up to you to consider the 
 user options like `encode`. The library won't do any formatting for you.
 
+## Develop
+
+If you want to improve the library, the easiest way to get started is by cloning
+the repo, and then running:
+
+```
+yarn install
+yarn start
+```
+
+This will start [jest](https://facebook.github.io/jest/) in `watch mode`. In
+this way you can develop new features and make sure that everything is working 
+as it should.
+
+The recommended way of creating new features is to first create the tests in
+either `test/parse.test.js` or `test/stringify.test.js`, and then make sure that
+they pass. 
+
+It's also recommended that you run `yarn start` with the `--coverage` flag 
+before submitting any pull requests, to make sure that all your new code has
+test coverage.
+
 ## Contributing
+
+You can contribute by 
+[submitting an issue](https://github.com/filipstefansson/search-params/issues)
+or by creating a new pull request. 
+
+### Issues and bugs
+
+If you've discoved a bug, please create a new issue including the steps to 
+reproduce the problem.
+
+### Pull requests
+
+If you want to help improve this libtparary, feel free to create a pull request
+with new features or bugfixes. 
+
+The aim is to have:
+  * 90%+ [flow](https://flow.org/) coverage
+  * 100% test coverage
