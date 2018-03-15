@@ -26,14 +26,17 @@ export const stringify: StringifyFormatter = (
 ): string => {
   if (Array.isArray(value)) {
     const newValue: string[] = value
-      .map((val: Object) => {
+      .map((val: Object): string => {
         if (typeof val === 'string' && val.trim() !== '') {
           return ((options.encode
             ? `${encodeString(key)}=${encodeString(val.trim())}`
             : `${key}=${val.trim()}`): string);
         }
+        return '';
       })
-      .filter((val: Object | ?string) => val && val !== ''); // filter out empty values
+      .filter(
+        (val: Object | ?string): boolean => val !== undefined && val !== '',
+      ); // filter out empty values
 
     return (newValue.join('&'): string);
   }
@@ -45,7 +48,7 @@ export const stringify: StringifyFormatter = (
     return `${newKey}=${newValue}`;
   }
 
-  return ('': string);
+  return options.encode ? encodeString(key) : key;
 };
 
 export default ({

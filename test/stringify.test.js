@@ -21,7 +21,9 @@ describe('stringify', () => {
   });
 
   it('should handle empty values', () => {
-    expect(stringify({ foo: null, baz: 'qux', qux: ' ' })).toEqual('baz=qux');
+    expect(stringify({ foo: null, baz: 'qux', qux: ' ' })).toEqual(
+      'foo&baz=qux',
+    );
     expect(stringify({ foo: undefined, baz: 'qux' })).toEqual('baz=qux');
   });
 
@@ -59,6 +61,7 @@ describe('stringify', () => {
     expect(stringify({ 'foo bar': "baz'qux" }, { encode: false })).toEqual(
       "foo bar=baz'qux",
     );
+    expect(stringify({ fåo: null }, { encode: false })).toEqual('fåo');
   });
 
   it('can handle faulty formatters', () => {
