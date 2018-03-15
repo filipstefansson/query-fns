@@ -100,6 +100,14 @@ stringify         | parse                        |
 `foo=bar&bar=baz` | `{ foo: 'bar', bar: 'baz' }` |
 `foo=bar&foo=baz` | `{ foo: ['bar', 'baz'] }`    |
 
+#### bracketFormatter
+
+stringify              | parse                          |
+-----------------------|--------------------------------|
+`?foo[]=bar`           | `{ foo: ['bar'] }`             |
+`?foo[]=bar&foo[]=baz` | `{ foo: ['bar', 'baz'] }`      |
+`?foo[]=bar&baz=qux`   | `{ foo: ['bar'], baz: 'qux' }` |
+
 #### JSONAPIFormatter
 
 stringify                    | parse                                              |

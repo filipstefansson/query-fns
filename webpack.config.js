@@ -5,6 +5,7 @@ module.exports = {
     stringify: './src/stringify.js',
     'formatters/index': './src/formatters/index',
     'formatters/jsonapi': './src/formatters/jsonapi',
+    'formatters/brackets': './src/formatters/brackets',
     'utils/encode': './src/utils/encode',
   },
   output: {
