@@ -1,12 +1,11 @@
 import { parse } from '../src';
-import { JSONAPIFormatter } from '../src/formatters';
 
 describe('parse', () => {
   it('should not be null', () => {
     expect(parse).toBeDefined();
   });
 
-  it('to return an object with matching values', () => {
+  it('returns an object with matching values', () => {
     expect(parse('foo=bar')).toEqual({ foo: 'bar' });
   });
 
@@ -72,86 +71,5 @@ describe('parse', () => {
     expect(parse('foo=bar', { formatter: null })).toEqual({
       foo: 'bar',
     });
-  });
-
-  it('can parse jsonapi format', () => {
-    expect(
-      parse('?foo[bar]=qux&qux=quux', { formatter: JSONAPIFormatter }),
-    ).toEqual({ foo: { bar: ['qux'] }, qux: 'quux' });
-  });
-
-  it('can parse jsonapi format - array', () => {
-    expect(
-      parse('?foo[bar]=qux,quux', { formatter: JSONAPIFormatter }),
-    ).toEqual({ foo: { bar: ['qux', 'quux'] } });
-  });
-
-  it('can parse jsonapi format - multiple arrays', () => {
-    expect(
-      parse('?foo[bar]=qux,quux&bar[foo]=quux,qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ foo: { bar: ['qux', 'quux'] }, bar: { foo: ['quux', 'qux'] } });
-  });
-
-  it('can parse jsonapi format - weird keys', () => {
-    expect(
-      parse('?foo[bar=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ 'foo[bar': 'qux' });
-    expect(
-      parse('?foobar]=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ 'foobar]': 'qux' });
-    expect(
-      parse('?foo[bar]a=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ 'foo[bar]a': 'qux' });
-    expect(
-      parse('?fo[o[bar]=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ fo: { 'o[bar': ['qux'] } });
-    expect(
-      parse('?foo[[ba]r]=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ foo: { '[ba]r': ['qux'] } });
-    expect(
-      parse('?foo[[ba]]r]=qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ foo: { '[ba]]r': ['qux'] } });
-    expect(
-      parse('?[foo]=bar,qux', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ '': { foo: ['bar', 'qux'] } });
-  });
-
-  it('can parse jsonapi format - empty value', () => {
-    expect(
-      parse('?foo[bar]', {
-        formatter: JSONAPIFormatter,
-      }),
-    ).toEqual({ foo: { bar: null } });
-  });
-
-  it('can parse jsonapi format - disable encoding', () => {
-    expect(
-      parse('?foo[bar]=b%C3%A5z%20', {
-        formatter: JSONAPIFormatter,
-        decode: false,
-      }),
-    ).toEqual({ foo: { bar: ['b%C3%A5z%20'] } });
-    expect(
-      parse('?foo=b%C3%A5z%20', {
-        formatter: JSONAPIFormatter,
-        decode: false,
-      }),
-    ).toEqual({ foo: 'b%C3%A5z%20' });
   });
 });

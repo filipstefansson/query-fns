@@ -1,5 +1,4 @@
 import { stringify } from '../src';
-import { JSONAPIFormatter } from '../src/formatters';
 
 describe('stringify', () => {
   it('should not be null', () => {
@@ -66,101 +65,5 @@ describe('stringify', () => {
     expect(stringify({ foo: 'bar' }, { formatters: [null] })).toEqual(
       'foo=bar',
     );
-  });
-
-  it('can stringify to json api', () => {
-    expect(
-      stringify({ foo: { bar: ['qux'] } }, { formatter: JSONAPIFormatter }),
-    ).toEqual('foo[bar]=qux');
-  });
-
-  it('can stringify non array to json api', () => {
-    expect(
-      stringify({ foo: { bar: 'qux' } }, { formatter: JSONAPIFormatter }),
-    ).toEqual('foo[bar]=qux');
-  });
-
-  it('can stringify multiple values to json api', () => {
-    expect(
-      stringify(
-        { foo: { bar: ['qux'], qux: ['baz'] } },
-        { formatter: JSONAPIFormatter },
-      ),
-    ).toEqual('foo[bar]=qux&foo[qux]=baz');
-  });
-
-  it('can stringify multiple values with arrays to json api', () => {
-    expect(
-      stringify(
-        { foo: { bar: ['qux', 'quux'], qux: ['baz', 'bar'] } },
-        { formatter: JSONAPIFormatter },
-      ),
-    ).toEqual('foo[bar]=qux,quux&foo[qux]=baz,bar');
-  });
-
-  it('can stringify array to json api', () => {
-    expect(
-      stringify(
-        { foo: { bar: ['qux', 'baz'] } },
-        { formatter: JSONAPIFormatter },
-      ),
-    ).toEqual('foo[bar]=qux,baz');
-  });
-
-  it('can jsonapi stringify non nested array', () => {
-    expect(
-      stringify({ foo: ['qux', 'baz'] }, { formatter: JSONAPIFormatter }),
-    ).toEqual('foo=qux,baz');
-  });
-
-  it('can jsonapi stringify plain value', () => {
-    expect(
-      stringify({ foo: 'bar', baz: 'qux' }, { formatter: JSONAPIFormatter }),
-    ).toEqual('foo=bar&baz=qux');
-  });
-
-  it('can jsonapi stringify plain value', () => {
-    expect(
-      stringify({ foo: 'bar', baz: 'qux' }, { formatter: JSONAPIFormatter }),
-    ).toEqual('foo=bar&baz=qux');
-  });
-
-  it('can jsonapi stringify a bad value', () => {
-    expect(stringify({ foo: null }, { formatter: JSONAPIFormatter })).toEqual(
-      'foo',
-    );
-  });
-
-  it('can jsonapi stringify with URI encoding', () => {
-    expect(
-      stringify(
-        { 'foo bar': { bar: ["q'ux", 'baz'] } },
-        { formatter: JSONAPIFormatter },
-      ),
-    ).toEqual('foo%20bar[bar]=q%27ux,baz');
-    expect(stringify({ foo: 'b ar' }, { formatter: JSONAPIFormatter })).toEqual(
-      'foo=b%20ar',
-    );
-  });
-
-  it('can jsonapi stringify without encoding', () => {
-    expect(
-      stringify(
-        { 'f oo': 'bar' },
-        { formatter: JSONAPIFormatter, encode: false },
-      ),
-    ).toEqual('f oo=bar');
-    expect(
-      stringify(
-        { 'foo bar': { bar: ["q'ux", 'baz'] } },
-        { formatter: JSONAPIFormatter, encode: false },
-      ),
-    ).toEqual("foo bar[bar]=q'ux,baz");
-    expect(
-      stringify(
-        { foo: { bar: 'q ux' } },
-        { formatter: JSONAPIFormatter, encode: false },
-      ),
-    ).toEqual('foo[bar]=q ux');
   });
 });
