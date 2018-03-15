@@ -2,6 +2,9 @@
 
 Parse and stringify URL search params.
 
+* **Modular** – only import the stuff you need.
+* **Extendable** - write your own [formatters](#formatters) to support any query string format.
+
 ## Installation
 
 ```
@@ -94,6 +97,9 @@ parse('?foo[bar]=qux', { formatter: JSONAPIFormatter });
 
 #### defaultFormatter
 
+The default formatter will be used if you don't specify a formatter in the 
+options object.
+
 stringify         | parse                        |
 ------------------|------------------------------|
 `foo=bar`         | `{ foo: 'bar' }`             |
@@ -102,6 +108,8 @@ stringify         | parse                        |
 
 #### bracketFormatter
 
+The brackets formatter adds support for creating arrays using brackets.
+
 stringify              | parse                          |
 -----------------------|--------------------------------|
 `?foo[]=bar`           | `{ foo: ['bar'] }`             |
@@ -109,6 +117,9 @@ stringify              | parse                          |
 `?foo[]=bar&baz=qux`   | `{ foo: ['bar'], baz: 'qux' }` |
 
 #### JSONAPIFormatter
+
+The JSONAPI formatter aims to support the format recommended on the 
+[JSONAPI website](http://jsonapi.org/recommendations/#filtering).
 
 stringify                    | parse                                              |
 -----------------------------|----------------------------------------------------|
