@@ -12,6 +12,7 @@ module.exports = {
     library: 'searchParams',
     libraryTarget: 'umd',
   },
+  target: 'node',
   module: {
     rules: [
       {
