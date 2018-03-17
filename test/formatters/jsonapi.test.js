@@ -22,6 +22,14 @@ describe('JSONAPIFormatter.parse', () => {
     ).toEqual({ foo: { bar: ['qux', 'quux'] }, bar: { foo: ['quux', 'qux'] } });
   });
 
+  it('can parse multiple values with same key', () => {
+    expect(
+      parse('?foo[bar]=qux,quux&foo[qux]=quux', {
+        formatter: JSONAPIFormatter,
+      }),
+    ).toEqual({ foo: { bar: ['qux', 'quux'], qux: ['quux'] } });
+  });
+
   it('can parse weird keys', () => {
     expect(
       parse('?foo[bar=qux', {

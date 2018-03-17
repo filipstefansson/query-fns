@@ -1,5 +1,6 @@
 /* @flow */
 import encodeString from '../utils/encode';
+import extend from '../utils/extend';
 
 const parse: ParseFormatter = (
   key: string,
@@ -37,6 +38,11 @@ const parse: ParseFormatter = (
   // if there's no ending bracked, return original key
   if (parts.length > 1 && !parts[1].endsWith(']')) {
     newKey = key;
+  }
+
+  // if there's an previous value, extend that value with the new value
+  if (accumulator[newKey] && typeof accumulator[newKey] === 'object') {
+    newValue = extend(accumulator[newKey], newValue);
   }
 
   return { key: newKey, value: newValue };
