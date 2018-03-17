@@ -38,13 +38,17 @@ export default (input: ?Object, opts: StringifyOptions): string => {
         return (true: boolean);
 
       // include if object or string
-      return (typeof value === 'object' || typeof value === 'string': boolean);
+      return (typeof value === 'object' ||
+        typeof value === 'string' ||
+        typeof value === 'number': boolean);
     })
     .map((key: string): string => {
+      const value: Object =
+        typeof params[key] === 'number' ? params[key].toString() : params[key];
       // use defaultFormatter or custom formatter on value and return the output
       const stringified: string = formatter
-        ? (formatter.stringify(key, params[key], params, options): string)
-        : (stringify(key, params[key], params, options): string);
+        ? (formatter.stringify(key, value, params, options): string)
+        : (stringify(key, value, params, options): string);
 
       return (stringified: string);
     });
