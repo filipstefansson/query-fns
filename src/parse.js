@@ -8,7 +8,7 @@ import extend from './utils/extend';
  * @param  {string} string A query string
  * @return {Object}        The query string params
  */
-export default (query: string, opts: ParseOptions): Object => {
+export default (query: string, opts: ?ParseOptions): Object => {
   // early exit
   if (!query || typeof query !== 'string') return (Object.create(null): any);
 
