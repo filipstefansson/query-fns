@@ -1,9 +1,9 @@
 {
-  "name": "search-params",
+  "name": "searchparams",
   "version": "0.0.1",
   "description": "Parse and stringify URL search params.",
   "main": "index.js",
-  "repository": "https://github.com/filipstefansson/search-params",
+  "repository": "https://github.com/filipstefansson/searchparams",
   "author": "Filip Stefansson",
   "license": "MIT",
   "scripts": {
@@ -30,6 +30,7 @@
     "query",
     "react-router",
     "search-params",
+    "searchparams",
     "search",
     "string",
     "stringify",
