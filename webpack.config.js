@@ -1,3 +1,5 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
   entry: {
     index: './src/index.js',
@@ -24,4 +26,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new CopyWebpackPlugin(['package.json'])],
 };
