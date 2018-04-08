@@ -1,4 +1,4 @@
-# [searchparams](https://github.com/filipstefansson/searchparams) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/filipstefansson/searchparams/blob/master/LICENSE) [![Coverage Status](https://img.shields.io/coveralls/filipstefansson/searchparams/master.svg?style=flat)](https://coveralls.io/github/filipstefansson/searchparams?branch=master) [![CircleCI Status](https://circleci.com/gh/filipstefansson/searchparams.svg?style=shield&circle-token=ab2228bfc68a2fe6184b96d9fb7436f29a6d1b10)](https://circleci.com/gh/filipstefansson/searchparams) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/filipstefansson/searchparams#contributing)
+# [query-fns](https://github.com/filipstefansson/query-fns) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/filipstefansson/query-fns/blob/master/LICENSE) [![Coverage Status](https://img.shields.io/coveralls/filipstefansson/query-fns/master.svg?style=flat)](https://coveralls.io/github/filipstefansson/query-fns?branch=master) [![CircleCI Status](https://circleci.com/gh/filipstefansson/query-fns.svg?style=shield&circle-token=ab2228bfc68a2fe6184b96d9fb7436f29a6d1b10)](https://circleci.com/gh/filipstefansson/query-fns) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/filipstefansson/query-fns#contributing)
 
 Parse and stringify URL search params.
 
@@ -8,13 +8,13 @@ Parse and stringify URL search params.
 ## Installation
 
 ```
-yarn add searchparams
+yarn add query-fns
 ```
 
 or
 
 ```
-npm install searchparams
+npm install query-fns
 ```
 
 ## Usage
@@ -22,14 +22,14 @@ npm install searchparams
 Import the package using:
 
 ```js
-import { stringify, parse } from 'searchparams';
+import { stringify, parse } from 'query-fns';
 ```
 
 or specify what to import to save some bytes:
 
 ```js
-import stringify from 'searchparams/stringify';
-import parse from 'searchparams/parse';
+import stringify from 'query-fns/stringify';
+import parse from 'query-fns/parse';
 ```
 
 ### Parse
@@ -86,8 +86,8 @@ To use a custom formatter, simply import it and tell the `parse` or `stringify`
 method to use it.
 
 ```js
-import { JSONAPIFormatter } from 'searchparams/formatters';
-// import JSONAPIFormatter from 'searchparams/formatters/jsonapi';
+import { JSONAPIFormatter } from 'query-fns/formatters';
+// import JSONAPIFormatter from 'query-fns/formatters/jsonapi';
 
 parse('?foo[bar]=qux', { formatter: JSONAPIFormatter });
 // => { foo: { bar: ['qux'] } }
@@ -202,7 +202,7 @@ test coverage.
 ## Contributing
 
 You can contribute by 
-[submitting an issue](https://github.com/filipstefansson/searchparams/issues)
+[submitting an issue](https://github.com/filipstefansson/query-fns/issues)
 or by creating a new pull request. 
 
 ### Issues and bugs

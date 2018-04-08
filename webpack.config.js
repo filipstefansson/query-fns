@@ -11,7 +11,7 @@ module.exports = {
     'utils/encode': './src/utils/encode',
   },
   output: {
-    library: 'searchParams',
+    library: 'query-fns',
     libraryTarget: 'umd',
   },
   target: 'node',
